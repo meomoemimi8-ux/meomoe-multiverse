@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#3fa34d" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="MèoFit" />
+<title>MèoFit 🐾 — Lịch tập tại nhà</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐱</text></svg>" />
+<style>
+  :root{
+    --green:#3fa34d; --green-d:#2f7d3a; --green-l:#7bd389;
+    --bg:#f4fbf2; --card:#ffffff; --ink:#2b3a2e; --muted:#789078;
+    --red:#ff6b6b; --blue:#4dabf7; --yellow:#ffd43b; --purple:#b197fc; --pink:#ff8fb1; --orange:#ffa94d; --teal:#38d9c9;
+    --shadow:0 8px 22px rgba(63,163,77,.14);
+    --r:22px;
+    font-size:16px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Quicksand',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,system-ui,sans-serif;
+    background:
+      radial-gradient(circle at 12% 8%, #e7f9e4 0, transparent 40%),
+      radial-gradient(circle at 88% 4%, #fff3f6 0, transparent 35%),
+      var(--bg);
+    color:var(--ink);
+    min-height:100vh;
+    padding-bottom:84px;
+    overflow-x:hidden;
+  }
+  .flowers{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .flowers span{position:absolute;font-size:20px;opacity:.5;animation:float 9s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-16px) rotate(12deg)}}
+
+  .app{position:relative;z-index:1;max-width:520px;margin:0 auto;padding:14px 14px 0}
+
+  header.top{display:flex;align-items:center;gap:10px;justify-content:center;padding:8px 4px 14px}
+  header.top .logo{font-size:30px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.12))}
+  header.top h1{font-size:1.45rem;margin:0;font-weight:800;letter-spacing:.5px;
+    background:linear-gradient(90deg,var(--green-d),var(--green-l),var(--purple));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+  .card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:18px;margin-bottom:14px}
+
+  .hero{background:linear-gradient(135deg,var(--green) 0%,var(--green-l) 100%);color:#fff;border-radius:26px;padding:20px;box-shadow:0 12px 26px rgba(63,163,77,.35);position:relative;overflow:hidden;margin-bottom:14px}
+  .hero::after{content:"🌿";position:absolute;right:-6px;bottom:-14px;font-size:90px;opacity:.18;transform:rotate(-15deg)}
+  .hero .day{font-size:.95rem;opacity:.92;font-weight:600}
+  .hero .title{font-size:1.55rem;font-weight:800;margin:4px 0 2px}
+  .hero .sub{font-size:.92rem;opacity:.95}
+  .hero .extra{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px}
+  .chip{background:rgba(255,255,255,.25);padding:4px 10px;border-radius:20px;font-size:.78rem;font-weight:700;backdrop-filter:blur(4px)}
+
+  .stats{display:flex;gap:10px;margin-bottom:14px}
+  .stat{flex:1;background:var(--card);border-radius:18px;padding:12px;text-align:center;box-shadow:var(--shadow)}
+  .stat .num{font-size:1.5rem;font-weight:800;color:var(--green-d)}
+  .stat .lbl{font-size:.72rem;color:var(--muted);font-weight:600;margin-top:2px}
+
+  .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:none;border-radius:18px;padding:16px;font-size:1.1rem;font-weight:800;background:linear-gradient(135deg,var(--green),var(--green-d));color:#fff;box-shadow:0 8px 18px rgba(47,125,58,.35);cursor:pointer;transition:transform .08s;font-family:inherit}
+  .btn:active{transform:scale(.97)}
+  .btn.sec{background:#fff;color:var(--green-d);border:2px solid var(--green-l);box-shadow:none}
+  .btn.rest-day{background:linear-gradient(135deg,#b197fc,#9775fa);box-shadow:0 8px 18px rgba(151,117,250,.35)}
+
+  h2.sec-title{font-size:1.05rem;margin:6px 4px 10px;font-weight:800;display:flex;align-items:center;gap:7px}
+
+  /* level selector */
+  .levels{margin-bottom:14px}
+  .levels .lab{font-size:.78rem;color:var(--muted);font-weight:700;margin:0 4px 6px}
+  .seg{display:flex;gap:6px;background:#e9f5e7;padding:5px;border-radius:16px}
+  .seg button{flex:1;border:none;background:none;padding:9px 4px;border-radius:12px;font-weight:800;color:var(--muted);font-family:inherit;font-size:.8rem;cursor:pointer;line-height:1.15}
+  .seg button small{display:block;font-size:.62rem;font-weight:600;opacity:.85;margin-top:2px}
+  .seg button.on{background:#fff;color:var(--green-d);box-shadow:var(--shadow)}
+
+  .week-row{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:16px;margin-bottom:8px;background:var(--card);box-shadow:var(--shadow)}
+  .week-row.today{outline:3px solid var(--green-l);background:#f3fcf1}
+  .week-row .dow{width:46px;font-weight:800;color:var(--green-d);font-size:.92rem;flex:none;text-align:center}
+  .week-row .body{flex:1}
+  .week-row .body .nm{font-weight:700;font-size:.96rem}
+  .week-row .body .tg{font-size:.76rem;color:var(--muted)}
+  .week-row .dot{width:10px;height:10px;border-radius:50%;flex:none}
+
+  .sess-card{display:flex;align-items:center;gap:14px;padding:16px;border-radius:20px;margin-bottom:12px;color:#fff;cursor:pointer;box-shadow:var(--shadow);transition:transform .08s}
+  .sess-card:active{transform:scale(.98)}
+  .sess-card .ic{font-size:30px}
+  .sess-card .info{flex:1}
+  .sess-card .info .t{font-weight:800;font-size:1.12rem}
+  .sess-card .info .s{font-size:.8rem;opacity:.92}
+  .sess-card .arrow{font-size:1.4rem;opacity:.9}
+  .sess-card .badge-done{background:rgba(255,255,255,.3);border-radius:14px;padding:3px 9px;font-size:.72rem;font-weight:700}
+
+  .ex{background:var(--card);border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:var(--shadow);border-left:6px solid var(--green-l)}
+  .ex .row1{display:flex;align-items:flex-start;gap:10px}
+  .ex .idx{width:26px;height:26px;border-radius:50%;background:var(--green);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex:none}
+  .ex .nm{font-weight:800;font-size:1.02rem;line-height:1.25}
+  .ex .meta{font-size:.82rem;color:var(--green-d);font-weight:700;margin-top:2px}
+  .tag{display:inline-block;padding:3px 9px;border-radius:12px;font-size:.72rem;font-weight:800;color:#fff;margin-top:7px}
+  .ex .muscle{display:flex;gap:11px;align-items:center;font-size:.82rem;color:var(--ink);margin-top:9px;line-height:1.45;background:#f3f8f1;padding:9px 11px;border-radius:12px}
+  .ex .muscle b{color:var(--green-d)}
+  .ex .muscle .m-txt{flex:1}
+  .bodymap{flex:none;width:74px;text-align:center}
+  .bodymap .m-img{width:74px;height:92px;object-fit:contain;border-radius:12px;background:#fbfdfa;border:1px solid #e3efe2;display:block}
+  .bodymap .m-img.gif{background:#f4f9f2}
+  .bodymap .bm-lbl{font-size:.57rem;color:var(--muted);font-weight:700;margin-top:3px;line-height:1.2}
+  .ex .gym{font-size:.82rem;color:var(--muted);margin-top:8px;line-height:1.45;background:#fff8e6;padding:9px 11px;border-radius:12px;border-left:4px solid var(--yellow)}
+  .ex .gym b{color:var(--ink)}
+  .ex .links{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+  .ex .links a{display:inline-flex;align-items:center;gap:4px;font-size:.74rem;font-weight:800;text-decoration:none;padding:5px 10px;border-radius:20px;background:#eef7ec;color:var(--green-d)}
+  .ex .links a.vid{background:#ffeaea;color:var(--red)}
+
+  nav.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;justify-content:space-around;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-top:1px solid #e3efe2;padding:6px 6px calc(6px + env(safe-area-inset-bottom));max-width:520px;margin:0 auto}
+  nav.tabbar button{background:none;border:none;flex:1;padding:7px 2px;cursor:pointer;color:var(--muted);font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.68rem;font-weight:700;transition:color .15s}
+  nav.tabbar button .i{font-size:1.35rem;transition:transform .15s}
+  nav.tabbar button.active{color:var(--green-d)}
+  nav.tabbar button.active .i{transform:translateY(-2px) scale(1.12)}
+
+  .player{position:fixed;inset:0;z-index:100;background:linear-gradient(160deg,#eafae6,#f4fbf2);display:none;flex-direction:column;padding:18px;padding-top:calc(18px + env(safe-area-inset-top))}
+  .player.show{display:flex}
+  .player .pbar{height:8px;border-radius:8px;background:#dcefd8;overflow:hidden;margin-bottom:10px}
+  .player .pbar i{display:block;height:100%;background:linear-gradient(90deg,var(--green-l),var(--green));transition:width .3s}
+  .player .phead{display:flex;justify-content:space-between;align-items:center;font-weight:800;color:var(--green-d);margin-bottom:10px}
+  .player .phead .x{background:#fff;border:none;width:38px;height:38px;border-radius:50%;font-size:1.1rem;box-shadow:var(--shadow);cursor:pointer;color:var(--ink)}
+  .player .center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+  .player .phase-lbl{font-size:1rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .player .ex-name{font-size:1.55rem;font-weight:800;line-height:1.2;margin-bottom:6px;padding:0 6px}
+  .player .ex-tag{margin-bottom:10px}
+  .ring{position:relative;width:230px;height:230px;margin:4px 0 12px}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring .num .big{font-size:3.4rem;font-weight:800;color:var(--green-d);line-height:1}
+  .ring .num .small{font-size:.95rem;color:var(--muted);font-weight:700;margin-top:4px}
+  .player .setinfo{font-size:1.05rem;font-weight:800;color:var(--ink);margin-bottom:3px}
+  .player .target{font-size:.92rem;color:var(--green-d);font-weight:700;margin-bottom:2px}
+  .player .tempo{font-size:.78rem;color:var(--muted);font-weight:600;margin-bottom:8px}
+  .player .nextup{font-size:.82rem;color:var(--muted);font-weight:600;margin-bottom:12px;min-height:1.1em}
+  .player .controls{display:flex;gap:10px;margin-top:6px;width:100%;max-width:360px}
+  .player .controls .btn{padding:14px}
+  .done-screen{text-align:center}
+  .done-screen .big-emoji{font-size:80px;animation:pop .5s}
+  @keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.25)}100%{transform:scale(1)}}
+
+  .empty{text-align:center;color:var(--muted);padding:30px 10px;font-weight:600}
+  .hist-item{display:flex;align-items:center;gap:10px;padding:11px;background:var(--card);border-radius:14px;margin-bottom:8px;box-shadow:var(--shadow)}
+  .hist-item .e{font-size:1.4rem}
+  .hist-item .d{flex:1}
+  .hist-item .d .n{font-weight:700;font-size:.92rem}
+  .hist-item .d .t{font-size:.74rem;color:var(--muted)}
+
+  .note-box{background:#fff8e6;border-radius:16px;padding:14px;font-size:.84rem;line-height:1.5;color:#7a6a2e;border-left:5px solid var(--yellow);margin-bottom:14px}
+  .note-box.rope{background:#eef4ff;color:#3a4a6a;border-left-color:var(--blue)}
+  .note-box.lock{background:#fdeef4;color:#7a3a55;border-left-color:var(--pink)}
+
+  .view{display:none;animation:fade .25s}
+  .view.show{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  a.vidlink{display:inline-flex;align-items:center;gap:6px;color:var(--red);font-weight:800;text-decoration:none;font-size:.9rem;margin-top:4px}
+
+  /* mèo mascot Mèo Lực Sĩ */
+  header.top .mascot{width:48px;height:48px;flex:none;filter:drop-shadow(0 3px 4px rgba(0,0,0,.12))}
+  .catface{width:100%;height:100%;display:block}
+
+  /* footer đồng bộ Meomoe Multiverse */
+  .footer{position:relative;text-align:center;padding:2.6rem 1.2rem 2.1rem;margin:20px -14px 0;background:#eaf7e6;color:var(--ink);border-radius:28px 28px 0 0}
+  .footer__cat{font-size:2.2rem;margin-bottom:.4rem}
+  .footer p{margin:.25rem 0;font-size:.86rem;line-height:1.5}
+  .footer a{color:var(--green-d);font-weight:800;text-decoration:none}
+  .footer__domain{color:var(--muted);font-size:.76rem;font-weight:700}
+
+  /* vệt chân mèo theo con trỏ */
+  .cursor-trail{position:fixed;inset:0;pointer-events:none;z-index:998}
+  .cursor-trail .paw{position:absolute;transform:translate(-50%,-50%) rotate(var(--r,0deg));font-size:1rem;animation:pawFade .9s ease-out forwards}
+  @keyframes pawFade{0%{opacity:.8;transform:translate(-50%,-50%) rotate(var(--r,0deg)) scale(.55)}100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--r,0deg)) scale(1.3)}}
+
+  h1, .hero .title, h2.sec-title, .player .ex-name{font-family:'Baloo 2','Quicksand',sans-serif}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="flowers" id="flowers"></div>
+<div class="cursor-trail" id="trail" aria-hidden="true"></div>
+
+<div class="app">
+  <header class="top"><span class="mascot" id="mascot" role="img" aria-label="Mèo Lực Sĩ"></span><h1>MèoFit</h1><span class="logo">🌸</span></header>
+  <section class="view show" id="v-home"></section>
+  <section class="view" id="v-week"></section>
+  <section class="view" id="v-sess"></section>
+  <section class="view" id="v-prog"></section>
+  <footer class="footer">
+    <div class="footer__cat">🐱🏋️</div>
+    <p>Made with 🎀 &amp; 🐾 — một vũ trụ của <a href="https://multiverse.meomoe.com">Meomoe Multiverse</a></p>
+    <p class="footer__domain">MèoFit · 🐾 Mèo Lực Sĩ · fit.meomoe.com · 2026</p>
+  </footer>
+</div>
+
+<nav class="tabbar">
+  <button data-tab="home" class="active"><span class="i">🏠</span>Hôm nay</button>
+  <button data-tab="week"><span class="i">📅</span>Lịch tuần</button>
+  <button data-tab="sess"><span class="i">🏋️</span>Buổi tập</button>
+  <button data-tab="prog"><span class="i">📊</span>Tiến độ</button>
+</nav>
+
+<div class="player" id="player">
+  <div class="pbar"><i id="pbar-fill" style="width:0%"></i></div>
+  <div class="phead"><span id="p-session">Buổi tập</span><button class="x" id="p-close">✕</button></div>
+  <div class="center" id="p-center"></div>
+</div>
+
+<script>
+/* ============ MUSCLE TAG COLORS ============ */
+const MUSCLE_COLORS = {
+  'Khởi động':'var(--teal)','Toàn thân':'var(--purple)','Mông':'var(--pink)','Chân':'var(--green)',
+  'Đùi sau':'var(--teal)','Đùi trong':'var(--green-l)','Lưng':'var(--blue)','Ngực':'var(--orange)',
+  'Vai':'var(--yellow)','Core / Bụng':'var(--red)','Cardio':'var(--purple)','Dãn cơ':'var(--green-l)'
+};
+const tagColor = m => MUSCLE_COLORS[m] || 'var(--green)';
+const yt = q => 'https://www.youtube.com/results?search_query=' + encodeURIComponent(q);
+
+/* Sơ đồ cơ thể (SVG nội bộ, chạy offline) — highlight nhóm cơ chính, có nhấp nháy động */
+// Ảnh giải phẫu nhóm cơ thật từ Wikimedia Commons (nguồn mở). GIF 3D xoay cho mông/đùi.
+const FP = 'https://commons.wikimedia.org/wiki/Special:FilePath/';
+const MUSCLE_IMG = {
+  'Mông':        [FP+'Gluteus_maximus_3D.gif',          'Cơ mông lớn (gluteus maximus)', true],
+  'Chân':        [FP+'Quadriceps_3D.gif',               'Cơ đùi trước (quadriceps)',     true],
+  'Đùi sau':     [FP+'Hamstrings.gif',                  'Gân kheo – đùi sau (hamstrings)', true],
+  'Đùi trong':   [FP+'Gray344.png?width=400',           'Cơ đùi trong (adductors)',      false],
+  'Lưng':        [FP+'Latissimus_dorsi.PNG?width=400',  'Cơ lưng xô (latissimus dorsi)', false],
+  'Ngực':        [FP+'Pectoralis_major.png?width=400',  'Cơ ngực (pectoralis major)',    false],
+  'Vai':         [FP+'Deltoideus.png?width=400',        'Cơ vai (deltoid)',              false],
+  'Core / Bụng': [FP+'Rectus_abdominis.png?width=400',  'Cơ bụng (rectus abdominis)',    false],
+};
+const MUSCLE_IMG_FULL = [FP+'Bougle_whole2_retouched.png?width=400', 'Hệ cơ toàn thân', false];
+function muscleArt(m){
+  const img = MUSCLE_IMG[m] || MUSCLE_IMG_FULL; // Khởi động/Toàn thân/Cardio/Dãn cơ → toàn thân
+  return '<div class="bodymap"><img class="m-img'+(img[2]?' gif':'')+'" src="'+img[0]+'" alt="'+img[1]+
+    '" loading="lazy" referrerpolicy="no-referrer" onerror="var b=this.closest(\'.bodymap\');if(b)b.style.display=\'none\'">'+
+    '<div class="bm-lbl">'+img[1]+'</div></div>';
+}
+
+/* ============ EXERCISE DATA ============
+   type:'reps' => mục tiêu số lần (timer đếm ngược theo nhịp giây/rep)
+   type:'time' => giữ / theo giây
+   work = số giây mỗi hiệp (đã tính theo nhịp người mới ~3–4s/rep, đảm bảo cả buổi ≤ 1 tiếng)
+   mp = cơ CHÍNH, ms = cơ PHỤ ; gymName = máy/biến thể phòng gym (null = không cần dụng cụ)
+*/
+const WGS = {n:"World's Greatest Stretch", en:"World's Greatest Stretch", mi:'🤸', m:'Khởi động',
+  sets:3, reps:'8 lần/bên', work:32, rest:20, type:'reps', tempo:'Giãn động chậm & sâu',
+  mp:'Cơ gập hông, gân kheo (đùi sau)', ms:'Cơ ngực – lưng trên, cơ mông', gymName:null};
+const WGS_END = {...WGS, n:"World's Greatest Stretch (kết)", m:'Dãn cơ'};
+const PIGEON = {n:'Pigeon Stretch (dãn cơ)', en:'Pigeon pose hip stretch', mi:'🧘', m:'Dãn cơ',
+  sets:2, reps:'giữ 30s mỗi bên', work:30, rest:5, type:'time', perSide:true, tempo:'Giữ tĩnh, thở đều',
+  mp:'Cơ mông, cơ hình lê (piriformis)', ms:'Cơ gập hông', gymName:null};
+
+const SESSIONS = [
+ { id:1, name:'Buổi 1', icon:'🌱', grad:'linear-gradient(135deg,#3fa34d,#7bd389)',
+   videos:{1:'4OJCTAkmvfk',2:'RCz59NZTNgc',3:'CIHTNZ7vrXw'},
+   ex:[
+     WGS,
+     {n:'Glute Bridge (dây kháng lực)', en:'Glute bridge with band', mi:'🍑', m:'Mông', sets:3, reps:'8 lần', work:24, rest:30, type:'reps', tempo:'Siết mông 1s ở trên', mp:'Cơ mông lớn (glute max)', ms:'Gân kheo, cơ lõi', gymName:'Máy Hip Thrust / cầu mông tạ đòn'},
+     {n:'Squat + Overhead Press', en:'Dumbbell squat to overhead press', mi:'🏋️', m:'Toàn thân', sets:4, reps:'10 lần', work:40, rest:40, type:'reps', tempo:'Xuống 2s – đẩy lên 1s', mp:'Cơ đùi trước (quads), cơ mông, cơ vai', ms:'Cơ lõi, tay sau (triceps), gân kheo', gymName:'Dumbbell Thruster / Smith Squat + đẩy vai'},
+     {n:'Romanian Deadlift (RDL)', en:'Romanian deadlift', mi:'🦵', m:'Đùi sau', sets:4, reps:'12 lần', work:48, rest:40, type:'reps', tempo:'Hạ chậm 3s, lưng thẳng', mp:'Gân kheo (đùi sau), cơ mông', ms:'Cơ lưng dưới, cơ lõi', gymName:'RDL tạ đòn/tạ đơn / Máy Leg Curl'},
+     {n:'Wall Sit', en:'Wall sit', mi:'🧱', m:'Chân', sets:3, reps:'giữ 45 giây', work:45, rest:30, type:'time', tempo:'Đùi song song sàn, giữ yên', mp:'Cơ đùi trước (quads)', ms:'Cơ mông, bắp chân', gymName:'Leg Press (giữ tĩnh) / Leg Extension'},
+     {n:'Seated Band Row', en:'Seated resistance band row', mi:'🚣', m:'Lưng', sets:3, reps:'15 lần', work:45, rest:30, type:'reps', tempo:'Kéo siết bả vai 1s', mp:'Cơ lưng giữa (rhomboid), cơ xô (lats)', ms:'Cơ tay trước (biceps), vai sau', gymName:'Máy Seated Cable Row'},
+     {n:'Low Plank → High Plank', en:'Plank up down', mi:'🪵', m:'Core / Bụng', sets:3, reps:'12 lần', work:36, rest:30, type:'reps', tempo:'Giữ hông cố định, không lắc', mp:'Cơ lõi (core/abs)', ms:'Cơ vai, tay sau, ngực', gymName:'Máy Ab Crunch / Cable Crunch'},
+     {n:'Intermediate Burpees', en:'Burpees', mi:'🔥', m:'Cardio', sets:4, reps:'15 lần', work:60, rest:15, type:'reps', tempo:'Đều nhịp, tiếp đất nhẹ', mp:'Toàn thân + tim mạch', ms:'Chân, ngực, vai, cơ lõi', gymName:'Box Jump / máy cardio cường độ cao'},
+     {n:'Jumping Squat', en:'Jump squat', mi:'⚡', m:'Chân', sets:4, reps:'20 giây', work:20, rest:10, type:'time', tempo:'Bật nhanh, tiếp đất gối mềm', mp:'Cơ đùi trước, cơ mông', ms:'Bắp chân, tim mạch', gymName:'Box Jump / Leg Press bùng nổ'},
+     PIGEON, WGS_END,
+   ]},
+ { id:2, name:'Buổi 2', icon:'🌿', grad:'linear-gradient(135deg,#4dabf7,#38d9c9)',
+   videos:{1:'ponsPOe0RVl',2:'lrZX_aqosVs',3:'qz9gVIZq9nc'},
+   ex:[
+     WGS,
+     {n:'Scapular Band Fly', en:'Resistance band rear delt fly', mi:'🦅', m:'Vai', sets:3, reps:'15 lần', work:45, rest:30, type:'reps', tempo:'Mở tay siết bả vai 1s', mp:'Cơ vai sau (rear delt), lưng trên', ms:'Cơ thang (trapezius)', gymName:'Máy Reverse Pec Deck (Fly ngược)'},
+     {n:'Knee Push Up', en:'Knee push up', mi:'💪', m:'Ngực', sets:3, reps:'8 lần', work:24, rest:30, type:'reps', tempo:'Hạ 2s, đẩy 1s', mp:'Cơ ngực (pectoral)', ms:'Cơ tay sau (triceps), vai trước', gymName:'Máy Chest Press (đẩy ngực)'},
+     {n:'Sumo Deadlift (dây)', en:'Sumo deadlift with band', mi:'🍑', m:'Mông', sets:4, reps:'12 lần', work:48, rest:40, type:'reps', tempo:'Đẩy gót, siết mông', mp:'Cơ mông, cơ đùi trong (adductor)', ms:'Gân kheo, lưng dưới', gymName:'Máy Hip Adduction / Sumo Deadlift tạ'},
+     {n:'Side Lunges', en:'Side lunge', mi:'🦵', m:'Đùi trong', sets:4, reps:'12 lần', work:48, rest:35, type:'reps', tempo:'Bước rộng, gối không vượt mũi chân', mp:'Cơ đùi trong (adductor), đùi trước', ms:'Cơ mông', gymName:'Máy Adductor (đùi trong)'},
+     {n:'Monster Walk (dây quanh chân)', en:'Monster walk resistance band', mi:'👾', m:'Mông', sets:4, reps:'15 lần mỗi chân', work:90, rest:35, type:'reps', perSide:true, tempo:'Giữ căng dây, bước ngang', mp:'Cơ mông nhỡ (glute medius)', ms:'Cơ mông lớn, cơ hông', gymName:'Máy Hip Abduction / Cable Abduction'},
+     {n:'Fire Hydrants', en:'Fire hydrant exercise', mi:'🚒', m:'Mông', sets:3, reps:'20 lần', work:60, rest:30, type:'reps', tempo:'Nâng đùi ngang, giữ lưng thẳng', mp:'Cơ mông nhỡ (glute medius)', ms:'Cơ mông lớn, hông ngoài', gymName:'Máy Hip Abduction / Cable Kickback'},
+     {n:'Bicycle Crunches', en:'Bicycle crunch', mi:'🚲', m:'Core / Bụng', sets:3, reps:'15–20 giây', work:20, rest:10, type:'time', tempo:'Xoay người chạm khuỷu – gối', mp:'Cơ bụng thẳng, cơ bụng chéo (obliques)', ms:'Cơ gập hông', gymName:'Máy Ab Crunch / Cable Woodchop'},
+     {n:'Leg Raise', en:'Lying leg raise', mi:'🦵', m:'Core / Bụng', sets:3, reps:'8 lần', work:24, rest:30, type:'reps', tempo:'Hạ chân chậm, ép lưng xuống sàn', mp:'Cơ bụng dưới', ms:'Cơ gập hông, cơ lõi', gymName:"Captain's Chair / Hanging Leg Raise"},
+     {n:'Plank', en:'Plank hold', mi:'🪵', m:'Core / Bụng', sets:3, reps:'giữ 60 giây', work:60, rest:30, type:'time', tempo:'Thẳng người, siết bụng & mông', mp:'Cơ lõi (toàn bộ core)', ms:'Cơ vai, mông, lưng', gymName:'Ab Wheel / plank đặt tạ'},
+     PIGEON, WGS_END,
+   ]},
+ { id:3, name:'Buổi 3', icon:'🌻', grad:'linear-gradient(135deg,#ffa94d,#ffd43b)',
+   videos:{1:'dkvkqZKR4oo',2:'Y4mfLb7-_h8',3:'ruSn_FCrSG8'},
+   ex:[
+     WGS,
+     {n:'Glute Bridge', en:'Glute bridge', mi:'🍑', m:'Mông', sets:3, reps:'8 lần', work:24, rest:30, type:'reps', tempo:'Siết mông 1s ở trên', mp:'Cơ mông lớn (glute max)', ms:'Gân kheo, cơ lõi', gymName:'Máy Hip Thrust / cầu mông tạ đòn'},
+     {n:'Squat', en:'Bodyweight squat', mi:'🦵', m:'Chân', sets:4, reps:'15 lần', work:60, rest:40, type:'reps', tempo:'Xuống 2s, lưng thẳng, gót bám sàn', mp:'Cơ đùi trước (quads), cơ mông', ms:'Gân kheo, cơ lõi', gymName:'Máy Leg Press / Hack Squat / Smith Squat'},
+     {n:'Lunges', en:'Forward lunge', mi:'🚶', m:'Chân', sets:4, reps:'12 lần', work:48, rest:35, type:'reps', tempo:'Bước dài, gối sau gần chạm sàn', mp:'Cơ đùi trước, cơ mông', ms:'Gân kheo, bắp chân, cơ lõi', gymName:'Walking Lunge tạ đơn / Leg Press 1 chân'},
+     {n:'Band Pull Through', en:'Band pull through', mi:'🍑', m:'Mông', sets:3, reps:'12 lần', work:36, rest:30, type:'reps', tempo:'Đẩy hông tới trước, siết mông', mp:'Cơ mông lớn', ms:'Gân kheo, cơ lõi', gymName:'Máy Cable Pull Through'},
+     {n:'Jumping Jack', en:'Jumping jacks', mi:'⭐', m:'Cardio', sets:3, reps:'30 giây', work:30, rest:15, type:'time', tempo:'Nhịp đều, tiếp đất nhẹ', mp:'Tim mạch toàn thân', ms:'Vai, bắp chân, cơ hông', gymName:'Máy cardio (elliptical / leo cầu thang)'},
+     {n:'Knee Ups', en:'Standing knee ups', mi:'🏃', m:'Cardio', sets:3, reps:'20 giây', work:20, rest:15, type:'time', tempo:'Nâng gối cao ngang hông', mp:'Cơ bụng dưới + tim mạch', ms:'Cơ gập hông, chân', gymName:"Captain's Chair Knee Raise"},
+     {n:'Plank Jack', en:'Plank jacks', mi:'🤸', m:'Core / Bụng', sets:3, reps:'10 giây', work:10, rest:10, type:'time', tempo:'Giữ thân thẳng khi bật chân', mp:'Cơ lõi + tim mạch', ms:'Vai, cơ mông, chân', gymName:'Mountain Climber trên máy trượt'},
+     PIGEON, WGS_END,
+   ]},
+ { id:4, name:'Buổi 4', icon:'🌷', grad:'linear-gradient(135deg,#b197fc,#ff8fb1)',
+   videos:{1:'smga8MM6zjU',2:'EDBYAdeDV9w',3:'5IPiQoTsMPQ'},
+   ex:[
+     WGS,
+     {n:'Glute Bridge', en:'Glute bridge', mi:'🍑', m:'Mông', sets:3, reps:'8 lần', work:24, rest:30, type:'reps', tempo:'Siết mông 1s ở trên', mp:'Cơ mông lớn (glute max)', ms:'Gân kheo, cơ lõi', gymName:'Máy Hip Thrust / cầu mông tạ đòn'},
+     {n:'Incline Push Up', en:'Incline push up', mi:'💪', m:'Ngực', sets:3, reps:'6–8 lần', work:24, rest:30, type:'reps', tempo:'Hạ 2s, đẩy 1s, thân thẳng', mp:'Cơ ngực trên', ms:'Cơ vai trước, tay sau (triceps)', gymName:'Máy Incline Chest Press'},
+     {n:'Sumo Squat', en:'Sumo squat', mi:'🍑', m:'Mông', sets:4, reps:'12 lần', work:48, rest:40, type:'reps', tempo:'Chân rộng, mũi mở 45°, xuống sâu', mp:'Cơ mông, cơ đùi trong (adductor)', ms:'Cơ đùi trước', gymName:'Máy Leg Press (chân rộng) / Hack Squat'},
+     {n:'Kick Back', en:'Glute kickback', mi:'🦶', m:'Mông', sets:3, reps:'12–15 lần', work:45, rest:30, type:'reps', tempo:'Đá gót lên, siết mông 1s', mp:'Cơ mông lớn (glute max)', ms:'Gân kheo', gymName:'Máy Glute / Cable Kickback'},
+     {n:'Standing Abductor Lift (dây)', en:'Standing abductor lift band', mi:'🦵', m:'Mông', sets:3, reps:'15 lần', work:45, rest:30, type:'reps', tempo:'Nâng chân sang ngang, giữ 1s', mp:'Cơ mông nhỡ (glute medius), đùi ngoài', ms:'Cơ lõi giữ thăng bằng', gymName:'Máy Hip Abduction (đứng/ngồi)'},
+     {n:'Lying Clam Shells', en:'Clamshell exercise', mi:'🐚', m:'Mông', sets:3, reps:'15 lần', work:45, rest:30, type:'reps', tempo:'Mở gối như vỏ sò, giữ hông cố định', mp:'Cơ mông nhỡ (glute medius)', ms:'Cơ hông ngoài', gymName:'Máy Hip Abduction / Cable'},
+     {n:'Flutter Kick', en:'Flutter kicks abs', mi:'🦵', m:'Core / Bụng', sets:4, reps:'giữ lâu nhất có thể', work:30, rest:30, type:'time', tempo:'Đá chân luân phiên, ép lưng xuống', mp:'Cơ bụng dưới', ms:'Cơ gập hông, cơ lõi', gymName:"Captain's Chair / Hanging Leg Raise"},
+     {n:'Mountain Climber', en:'Mountain climbers', mi:'⛰️', m:'Core / Bụng', sets:4, reps:'15 lần mỗi chân', work:45, rest:30, type:'reps', perSide:true, tempo:'Kéo gối nhanh, giữ thân thẳng', mp:'Cơ lõi + tim mạch', ms:'Cơ vai, gập hông, chân', gymName:'Máy Ab + cardio cường độ cao'},
+     PIGEON, WGS_END,
+   ]},
+];
+
+const LEVELS = {
+  1:{name:'Level 1', short:'L1', desc:'Tập chậm — làm quen kỹ thuật'},
+  2:{name:'Level 2', short:'L2', desc:'Tốc độ chuẩn'},
+  3:{name:'Level 3', short:'L3', desc:'Tập với dụng cụ (tạ/dây)'},
+};
+
+const WEEK = [
+  {dow:'CN',  day:0, sid:null, extra:'', rope:false},
+  {dow:'Thứ 2',day:1, sid:1, extra:'+ dãn cơ', rope:false},
+  {dow:'Thứ 3',day:2, sid:2, extra:'+ nhảy dây + dãn cơ', rope:true},
+  {dow:'Thứ 4',day:3, sid:3, extra:'+ dãn cơ', rope:false},
+  {dow:'Thứ 5',day:4, sid:null, extra:'', rope:false},
+  {dow:'Thứ 6',day:5, sid:4, extra:'+ nhảy dây + dãn cơ', rope:true},
+  {dow:'Thứ 7',day:6, sid:1, extra:'+ dãn cơ', rope:false},
+];
+const weekByDay = d => WEEK.find(w=>w.day===d);
+const sessById = id => SESSIONS.find(s=>s.id===id);
+
+const ROPE_NOTE = `🪢 <b>Nhảy dây (Thứ 3 & Thứ 6):</b> mỗi buổi <b>5 hiệp × 100 cái</b>. <b>BẮT BUỘC khởi động kỹ</b> trước khi nhảy — nếu không dễ to bắp chuối, hại khớp gối, phản tác dụng. Người mới sức yếu: nhảy nhanh & nhiều cái nhất có thể rồi nghỉ vài giây, tập đều đặn cơ thể sẽ khỏe dần lên.`;
+
+/* ============ STORAGE ============ */
+const LS='meofit_history_v1', LS_LV='meofit_level';
+function loadHist(){ try{ return JSON.parse(localStorage.getItem(LS))||[] }catch(e){ return [] } }
+function saveHist(h){ localStorage.setItem(LS, JSON.stringify(h)); }
+function getLevel(){ return parseInt(localStorage.getItem(LS_LV))||1; }
+function setLevel(l){ localStorage.setItem(LS_LV, l); }
+function todayStr(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function logDone(sid,lv){ const h=loadHist(); h.unshift({date:todayStr(),ts:Date.now(),sid,lv}); saveHist(h); }
+function doneToday(){ return loadHist().some(e=>e.date===todayStr()); }
+function calcStreak(){
+  const h=loadHist(); if(!h.length) return 0;
+  const days=new Set(h.map(e=>e.date)); let streak=0,d=new Date();
+  if(!days.has(todayStr())) d.setDate(d.getDate()-1);
+  for(;;){ const s=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    if(days.has(s)){ streak++; d.setDate(d.getDate()-1);} else break; }
+  return streak;
+}
+
+/* ============ HELPERS ============ */
+const DOW_FULL=['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
+function estMinutes(s){
+  let sec=0; s.ex.forEach(e=>{ sec += e.sets*e.work + (e.sets-1)*(e.rest||30) + e.sets*3; });
+  return Math.round(sec/60);
+}
+function levelSeg(onchangeFn){
+  const lv=getLevel();
+  return `<div class="levels"><div class="lab">🎚️ Cấp độ tập:</div><div class="seg">`+
+    [1,2,3].map(l=>`<button class="${l===lv?'on':''}" onclick="${onchangeFn}(${l})">${LEVELS[l].name}<small>${LEVELS[l].desc}</small></button>`).join('')+
+    `</div></div>`;
+}
+
+/* ============ HOME ============ */
+function chooseLevelHome(l){ setLevel(l); renderHome(); }
+function renderHome(){
+  const today=new Date().getDay(), w=weekByDay(today), sess=w.sid?sessById(w.sid):null;
+  const lv=getLevel(), streak=calcStreak(), total=loadHist().length, done=doneToday();
+  let hero;
+  if(sess){
+    hero=`<div class="hero" style="background:${sess.grad}">
+      <div class="day">${DOW_FULL[today]} • ${LEVELS[lv].name}</div>
+      <div class="title">${sess.icon} ${sess.name}</div>
+      <div class="sub">${sess.ex.length} bài • ~${estMinutes(sess)} phút • ${w.extra}</div>
+      <div class="extra"><span class="chip">${done?'✅ Đã tập hôm nay':'🐾 Sẵn sàng nào!'}</span></div>
+    </div>`;
+  } else {
+    hero=`<div class="hero" style="background:linear-gradient(135deg,#b197fc,#9775fa)">
+      <div class="day">${DOW_FULL[today]}</div>
+      <div class="title">😺 Hôm nay nghỉ ngơi</div>
+      <div class="sub">Thư giãn, dãn cơ nhẹ hoặc đi bộ tuỳ thích nha!</div></div>`;
+  }
+  const startBtn=sess
+    ?`<button class="btn" onclick="startWorkout(${sess.id})">▶️ Bắt đầu ${sess.name}</button>`
+    :`<button class="btn rest-day" onclick="go('week')">📅 Xem lịch tuần</button>`;
+  document.getElementById('v-home').innerHTML=`
+    ${hero}
+    <div class="stats">
+      <div class="stat"><div class="num">🔥 ${streak}</div><div class="lbl">Chuỗi ngày</div></div>
+      <div class="stat"><div class="num">💪 ${total}</div><div class="lbl">Tổng buổi tập</div></div>
+      <div class="stat"><div class="num">${done?'✅':'⭕'}</div><div class="lbl">Hôm nay</div></div>
+    </div>
+    ${levelSeg('chooseLevelHome')}
+    ${startBtn}
+    <div style="height:14px"></div>
+    ${w.rope?`<div class="note-box rope">${ROPE_NOTE}</div>`:''}
+    <div class="note-box">🌸 <b>Mẹo:</b> Dãn cơ luôn là bài cuối buổi. Trước khi dãn nên làm ấm cơ thể (đi bộ, tắm nước ấm) thì mới hiệu quả. Ai bận có thể dãn cuối ngày trước khi ngủ — ngủ ngon hơn nhiều đó!</div>`;
+}
+
+/* ============ WEEK ============ */
+function renderWeek(){
+  const today=new Date().getDay();
+  const rows=WEEK.map(w=>{
+    const sess=w.sid?sessById(w.sid):null;
+    const color=sess?sess.grad.match(/#\w+/)[0]:'#b197fc';
+    const nm=sess?sess.name:'😴 Nghỉ';
+    const tg=sess?(w.extra||''):'Thư giãn, nạp năng lượng';
+    return `<div class="week-row ${w.day===today?'today':''}" ${sess?`onclick="openSession(${sess.id})" style="cursor:pointer"`:''}>
+      <div class="dow">${w.dow}</div><div class="dot" style="background:${color}"></div>
+      <div class="body"><div class="nm">${nm}${w.rope?' 🪢':''}</div><div class="tg">${tg}</div></div>
+      ${sess?'<span style="opacity:.4">›</span>':''}</div>`;
+  }).join('');
+  document.getElementById('v-week').innerHTML=`
+    <h2 class="sec-title">📅 Lịch tập trong tuần</h2>
+    ${rows}
+    <div class="note-box rope" style="margin-top:8px">${ROPE_NOTE}</div>
+    <div class="note-box" style="margin-top:0">🔁 Tuần sau lặp lại y như trên. Bấm vào một buổi để xem chi tiết & bắt đầu tập nhé!</div>`;
+}
+
+/* ============ SESSIONS ============ */
+function renderSessList(){
+  const h=loadHist(), lv=getLevel();
+  const cards=SESSIONS.map(s=>{
+    const cnt=h.filter(e=>e.sid===s.id).length;
+    return `<div class="sess-card" style="background:${s.grad}" onclick="openSession(${s.id})">
+      <div class="ic">${s.icon}</div>
+      <div class="info"><div class="t">${s.name}</div><div class="s">${s.ex.length} bài • ~${estMinutes(s)} phút</div></div>
+      ${cnt?`<span class="badge-done">×${cnt}</span>`:''}<div class="arrow">›</div></div>`;
+  }).join('');
+  document.getElementById('v-sess').innerHTML=`
+    <h2 class="sec-title">🏋️ 4 Buổi tập</h2>
+    <div style="font-size:.82rem;color:var(--muted);margin:0 4px 12px;font-weight:600">Tập tại nhà, không cần dụng cụ. Mỗi bài có ghi nhóm cơ tác động + gợi ý máy/biến thể khi ra phòng gym.</div>
+    ${levelSeg('chooseLevelList')}
+    ${cards}
+    <div class="note-box">📺 Nên kết hợp <b>PLAN + xem video</b> để tập chuẩn kỹ thuật, hiệu quả cao & tránh chấn thương nhé!</div>`;
+}
+function chooseLevelList(l){ setLevel(l); renderSessList(); }
+function chooseLevelDetail(l, sid){ setLevel(l); openSession(sid); }
+
+function openSession(id){
+  const s=sessById(id), lv=getLevel(), vid=s.videos[lv];
+  const exs=s.ex.map((e,i)=>{
+    const links=`<div class="links">
+      <a class="vid" href="${yt(e.en+' exercise tutorial')}" target="_blank" rel="noopener">▶️ Cách tập đúng</a>
+      ${e.gymName?`<a href="${yt(e.gymName.split('/')[0]+' machine how to')}" target="_blank" rel="noopener">🔍 Xem máy tập</a>`:''}</div>`;
+    return `<div class="ex" style="border-left-color:${tagColor(e.m)}">
+      <div class="row1"><div class="idx">${i+1}</div><div>
+        <div class="nm">${e.mi} ${e.n}</div>
+        <div class="meta">${e.sets} hiệp × ${e.reps} • ⏱️ ~${e.work}s/hiệp</div>
+        <span class="tag" style="background:${tagColor(e.m)}">${e.m}</span></div></div>
+      <div class="muscle">${muscleArt(e.m)}<div class="m-txt"><b>💪 Cơ tác động:</b> Chính — ${e.mp}${e.ms?` · <span style="opacity:.85">Phụ — ${e.ms}</span>`:''}</div></div>
+      ${e.gymName?`<div class="gym"><b>🏋️ Khi tập gym:</b> ${e.gymName}${links}</div>`:`<div class="gym">🧘 Không cần dụng cụ — bài khởi động/dãn cơ.${links}</div>`}
+    </div>`;
+  }).join('');
+  document.getElementById('v-sess').innerHTML=`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+      <button class="btn sec" style="width:auto;padding:10px 14px" onclick="renderSessList()">‹ Quay lại</button>
+      <div style="font-weight:800;font-size:1.15rem">${s.icon} ${s.name}</div></div>
+    <div class="levels"><div class="lab">🎚️ Cấp độ (đổi video & cường độ):</div><div class="seg">
+      ${[1,2,3].map(l=>`<button class="${l===lv?'on':''}" onclick="chooseLevelDetail(${l},${id})">${LEVELS[l].name}<small>${LEVELS[l].desc}</small></button>`).join('')}
+    </div></div>
+    <a class="vidlink" href="https://youtu.be/${vid}" target="_blank" rel="noopener">▶️ Video full ${s.name} — ${LEVELS[lv].name}</a>
+    ${lv===3?`<div class="note-box" style="margin-top:8px">💡 <b>Level 3:</b> thêm tạ tay/tạ đòn hoặc tăng sức cản dây kháng lực cho các bài. Chỉ lên Level 3 khi đã tập chạy kỹ thuật vững.</div>`:'<div style="height:10px"></div>'}
+    ${exs}
+    <button class="btn" onclick="startWorkout(${s.id})">▶️ Bắt đầu tập buổi này</button>
+    <div style="height:10px"></div>`;
+  go('sess', true);
+  window.scrollTo(0,0);
+}
+
+/* ============ PROGRESS ============ */
+function renderProgress(){
+  const h=loadHist(), streak=calcStreak(), total=h.length;
+  const weekAgo=Date.now()-7*864e5, wkCount=h.filter(e=>e.ts>=weekAgo).length;
+  let list;
+  if(!h.length){ list=`<div class="empty">🐾 Chưa có buổi tập nào.<br>Bắt đầu buổi đầu tiên thôi nào!</div>`; }
+  else{
+    list=h.slice(0,40).map(e=>{
+      const s=sessById(e.sid), d=new Date(e.ts);
+      const ds=DOW_FULL[d.getDay()]+', '+d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear();
+      const tm=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+      return `<div class="hist-item"><div class="e">${s?s.icon:'🏋️'}</div>
+        <div class="d"><div class="n">${s?s.name:'Buổi tập'}${e.lv?' · '+LEVELS[e.lv].name:''}</div><div class="t">${ds} • ${tm}</div></div>
+        <div style="font-size:1.2rem">✅</div></div>`;
+    }).join('');
+  }
+  document.getElementById('v-prog').innerHTML=`
+    <h2 class="sec-title">📊 Tiến độ của tớ</h2>
+    <div class="stats">
+      <div class="stat"><div class="num">🔥 ${streak}</div><div class="lbl">Chuỗi ngày</div></div>
+      <div class="stat"><div class="num">📆 ${wkCount}</div><div class="lbl">Tuần này</div></div>
+      <div class="stat"><div class="num">💪 ${total}</div><div class="lbl">Tổng cộng</div></div></div>
+    <h2 class="sec-title">🗓️ Lịch sử tập</h2>
+    ${list}
+    ${h.length?`<button class="btn sec" style="margin-top:6px" onclick="clearHist()">🗑️ Xoá lịch sử</button>`:''}`;
+}
+function clearHist(){ if(confirm('Xoá toàn bộ lịch sử tập?')){ saveHist([]); renderProgress(); } }
+
+/* ============ NAV ============ */
+function go(tab, keepSess){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('show'));
+  document.getElementById('v-'+tab).classList.add('show');
+  document.querySelectorAll('nav.tabbar button').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
+  if(tab==='home') renderHome();
+  if(tab==='week') renderWeek();
+  if(tab==='sess' && !keepSess) renderSessList();
+  if(tab==='prog') renderProgress();
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('nav.tabbar button').forEach(b=>b.onclick=()=>go(b.dataset.tab));
+
+/* ============ AUDIO ============ */
+let actx=null;
+function initAudio(){ if(!actx){ try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } }
+function beep(freq=880,dur=.15,vol=.25){ if(!actx) return;
+  const o=actx.createOscillator(),g=actx.createGain();
+  o.type='sine'; o.frequency.value=freq; o.connect(g); g.connect(actx.destination);
+  g.gain.setValueAtTime(vol,actx.currentTime); g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+dur);
+  o.start(); o.stop(actx.currentTime+dur);
+}
+function beepGo(){ beep(660,.12); setTimeout(()=>beep(880,.18),140); }
+function beepTick(){ beep(700,.08,.18); }
+function vibrate(ms){ if(navigator.vibrate) navigator.vibrate(ms); }
+
+/* ============ WORKOUT PLAYER ============ */
+const P={sess:null,exIdx:0,setIdx:0,timer:null,remain:0,_restThen:null};
+const RING_R=100, RING_C=2*Math.PI*RING_R;
+
+function startWorkout(id){
+  initAudio();
+  P.sess=sessById(id); P.exIdx=0; P.setIdx=0;
+  document.getElementById('p-session').textContent=P.sess.icon+' '+P.sess.name+' · '+LEVELS[getLevel()].name;
+  document.getElementById('player').classList.add('show');
+  enterExercise();
+}
+function closePlayer(){ clearInterval(P.timer); P.timer=null; document.getElementById('player').classList.remove('show'); }
+document.getElementById('p-close').onclick=()=>{ if(confirm('Thoát buổi tập? Tiến độ buổi này sẽ không được lưu.')) closePlayer(); };
+
+function updateBar(){
+  const ex=P.sess.ex; let tot=0,done=0;
+  ex.forEach((e,i)=>{ tot+=e.sets; if(i<P.exIdx) done+=e.sets; else if(i===P.exIdx) done+=P.setIdx; });
+  document.getElementById('pbar-fill').style.width=(done/tot*100)+'%';
+}
+function nextName(){
+  const ex=P.sess.ex;
+  if(P.setIdx<ex[P.exIdx].sets-1) return 'Hiệp '+(P.setIdx+2)+' • '+ex[P.exIdx].n;
+  if(P.exIdx<ex.length-1) return 'Tiếp: '+ex[P.exIdx+1].mi+' '+ex[P.exIdx+1].n;
+  return 'Bài cuối cùng 🎉';
+}
+function ringSVG(p,color){
+  const off=RING_C*(1-p);
+  return `<svg width="230" height="230" viewBox="0 0 230 230">
+    <circle cx="115" cy="115" r="${RING_R}" fill="none" stroke="#dcefd8" stroke-width="16"/>
+    <circle cx="115" cy="115" r="${RING_R}" fill="none" stroke="${color}" stroke-width="16" stroke-linecap="round" stroke-dasharray="${RING_C}" stroke-dashoffset="${off}"/></svg>`;
+}
+function header(e){
+  return `<div class="phase-lbl" id="phase-lbl"></div>
+    <div class="ex-name">${e.mi} ${e.n}</div>
+    <div class="ex-tag"><span class="tag" style="background:${tagColor(e.m)}">${e.m}</span></div>`;
+}
+
+function enterExercise(){ P.setIdx=0; updateBar(); enterSet(); }
+function enterSet(){ clearInterval(P.timer); P.timer=null; updateBar(); startPrep(()=>startWork()); }
+
+function startPrep(then){
+  const e=P.sess.ex[P.exIdx]; let n=3;
+  const draw=()=>{
+    document.getElementById('p-center').innerHTML=`
+      ${header(e)}
+      <div class="ring">${ringSVG(n/3,'var(--yellow)')}<div class="num"><div class="big">${n}</div><div class="small">Sẵn sàng…</div></div></div>
+      <div class="setinfo">Hiệp ${P.setIdx+1}/${e.sets}</div>
+      <div class="target">🎯 ${e.reps}${e.perSide?' (cả 2 bên)':''}</div>
+      <div class="tempo">💡 ${e.tempo}</div>
+      <div class="nextup">${nextName()}</div>
+      <div class="controls"><button class="btn sec" onclick="skipExercise()">⏭ Bỏ qua bài</button></div>`;
+    document.getElementById('phase-lbl').textContent='Chuẩn bị';
+  };
+  draw(); beepTick();
+  P.timer=setInterval(()=>{ n--; if(n<=0){ clearInterval(P.timer); P.timer=null; then(); return;} draw(); beepTick(); },1000);
+}
+
+function startWork(){
+  const e=P.sess.ex[P.exIdx], total=e.work; P.remain=total;
+  beepGo(); vibrate(120);
+  const draw=()=>{
+    document.getElementById('p-center').innerHTML=`
+      ${header(e)}
+      <div class="ring">${ringSVG(P.remain/total,tagColor(e.m))}<div class="num"><div class="big">${P.remain}</div><div class="small">giây</div></div></div>
+      <div class="setinfo">Hiệp ${P.setIdx+1}/${e.sets}</div>
+      <div class="target">🎯 ${e.reps}${e.perSide?' (cả 2 bên)':''}</div>
+      <div class="tempo">💡 ${e.tempo}</div>
+      <div class="nextup">${nextName()}</div>
+      <div class="controls">
+        <button class="btn sec" onclick="finishSet()">✓ Xong sớm</button>
+        <button class="btn sec" onclick="skipExercise()">⏭ Bỏ bài</button></div>`;
+    document.getElementById('phase-lbl').textContent='Thực hiện';
+  };
+  draw();
+  P.timer=setInterval(()=>{ P.remain--;
+    if(P.remain<=0){ clearInterval(P.timer); P.timer=null; beepGo(); vibrate([120,80,120]); finishSet(); return; }
+    if(P.remain<=3) beepTick();
+    draw(); },1000);
+}
+
+function finishSet(){
+  clearInterval(P.timer); P.timer=null;
+  const e=P.sess.ex[P.exIdx];
+  if(P.setIdx<e.sets-1) startRest(e.rest||30, ()=>{ P.setIdx++; enterSet(); });
+  else nextExercise();
+}
+function startRest(sec,then){
+  P.remain=sec; const total=sec; P._restThen=then; beep(520,.15);
+  const draw=()=>{
+    document.getElementById('p-center').innerHTML=`
+      <div class="phase-lbl" style="color:var(--blue)">Nghỉ giữa hiệp</div>
+      <div class="ex-name" style="color:var(--blue)">😮‍💨 Hít thở sâu</div><div class="ex-tag"></div>
+      <div class="ring">${ringSVG(P.remain/total,'var(--blue)')}<div class="num"><div class="big" style="color:var(--blue)">${P.remain}</div><div class="small">giây nghỉ</div></div></div>
+      <div class="nextup">${nextName()}</div>
+      <div class="controls"><button class="btn" style="background:linear-gradient(135deg,#4dabf7,#3b8fd4)" onclick="skipRest()">⏭ Bỏ qua nghỉ</button></div>`;
+  };
+  draw();
+  P.timer=setInterval(()=>{ P.remain--;
+    if(P.remain<=0){ clearInterval(P.timer); P.timer=null; beepGo(); vibrate(100); const t=P._restThen; P._restThen=null; t(); return; }
+    if(P.remain<=3) beepTick(); draw(); },1000);
+}
+function skipRest(){ clearInterval(P.timer); P.timer=null; const t=P._restThen; P._restThen=null; if(t) t(); }
+function skipExercise(){ clearInterval(P.timer); P.timer=null; nextExercise(); }
+function nextExercise(){ if(P.exIdx<P.sess.ex.length-1){ P.exIdx++; enterExercise(); } else finishWorkout(); }
+
+function finishWorkout(){
+  clearInterval(P.timer); P.timer=null;
+  logDone(P.sess.id, getLevel());
+  document.getElementById('pbar-fill').style.width='100%';
+  beepGo(); setTimeout(beepGo,300);
+  const streak=calcStreak();
+  document.getElementById('p-center').innerHTML=`
+    <div class="done-screen">
+      <div class="big-emoji">🎉</div>
+      <div class="ex-name" style="color:var(--green-d)">Hoàn thành ${P.sess.name}!</div>
+      <p style="color:var(--muted);font-weight:600;margin:6px 0 4px">Giỏi quá đi 🐾 Đừng quên dãn cơ kỹ nhé!</p>
+      <div class="chip" style="background:var(--green-l);color:#fff;display:inline-block;margin:10px 0 20px">🔥 Chuỗi ${streak} ngày</div>
+      <div class="controls"><button class="btn" onclick="closePlayer();go('prog')">📊 Xem tiến độ</button></div>
+      <div class="controls"><button class="btn sec" onclick="closePlayer();go('home')">🏠 Về trang chủ</button></div>
+    </div>`;
+}
+
+/* ============ MASCOT: 🐾 Mèo Lực Sĩ (hệ catFace của Meomoe Multiverse) ============ */
+function meoFitCat(){
+  const fur='#ffb38a', eye='#5b4a52', whisk='rgba(91,74,82,.4)', spark='#ff9ec4';
+  return `<svg viewBox="0 0 100 100" class="catface" aria-hidden="true">
+    <g class="cf-ear cf-ear-l"><path d="M22 44 C16 10 43 21 51 44 Z" fill="${fur}"/><path d="M30 38 C27 22 40 28 45 40 Z" fill="#ffd0de"/></g>
+    <g class="cf-ear cf-ear-r"><path d="M78 44 C84 10 57 21 49 44 Z" fill="${fur}"/><path d="M70 38 C73 22 60 28 55 40 Z" fill="#ffd0de"/></g>
+    <circle cx="50" cy="58" r="38" fill="${fur}"/>
+    <ellipse cx="42" cy="40" rx="22" ry="13" fill="#fff" opacity=".16"/>
+    <ellipse cx="32" cy="72" rx="9" ry="5.5" fill="#ff8fb0" opacity=".5"/>
+    <ellipse cx="68" cy="72" rx="9" ry="5.5" fill="#ff8fb0" opacity=".5"/>
+    <path d="M16 41 Q50 25 84 41 L84 48 Q50 32 16 48 Z" fill="#3fa34d"/>
+    <path d="M16 44.5 Q50 28.5 84 44.5" stroke="#a8e6b0" stroke-width="2" fill="none"/>
+    <circle cx="50" cy="38.5" r="2.6" fill="#fff" opacity=".95"/>
+    <g class="cf-eye"><ellipse cx="37" cy="60" rx="10" ry="12.5" fill="${eye}"/><circle cx="33.5" cy="55" r="3.4" fill="#fff"/><circle cx="40" cy="64" r="1.7" fill="#fff" opacity=".85"/></g>
+    <g class="cf-eye"><ellipse cx="63" cy="60" rx="10" ry="12.5" fill="${eye}"/><circle cx="59.5" cy="55" r="3.4" fill="#fff"/><circle cx="66" cy="64" r="1.7" fill="#fff" opacity=".85"/></g>
+    <path d="M45 73 h10 l-5 5 Z" fill="#ff8fb0"/>
+    <path d="M50 78 q-6 6 -12 1 M50 78 q6 6 12 1" stroke="#0d0c0a" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <g stroke="${whisk}" stroke-width="1.6" stroke-linecap="round">
+      <line x1="24" y1="66" x2="4" y2="62"/><line x1="24" y1="73" x2="4" y2="76"/>
+      <line x1="76" y1="66" x2="96" y2="62"/><line x1="76" y1="73" x2="96" y2="76"/></g>
+    <g transform="translate(87,25)"><path d="M0,-6 C1.2,-1.2 1.2,-1.2 6,0 C1.2,1.2 1.2,1.2 0,6 C-1.2,1.2 -1.2,1.2 -6,0 C-1.2,-1.2 -1.2,-1.2 0,-6 Z" fill="${spark}"/></g>
+  </svg>`;
+}
+
+/* ============ INIT ============ */
+(function(){
+  document.getElementById('mascot').innerHTML = meoFitCat();
+  // hoa lá rơi
+  const f=document.getElementById('flowers'), em=['🌸','🌼','🌷','🌿','🍀','🌺','💚','🌻'];
+  for(let i=0;i<14;i++){ const s=document.createElement('span'); s.textContent=em[i%em.length];
+    s.style.left=(Math.random()*96)+'%'; s.style.top=(Math.random()*92)+'%';
+    s.style.fontSize=(14+Math.random()*16)+'px'; s.style.animationDelay=(Math.random()*9)+'s';
+    s.style.animationDuration=(7+Math.random()*6)+'s'; f.appendChild(s); }
+  // vệt chân mèo 🐾 theo con trỏ (chỉ trên thiết bị có chuột)
+  const trail=document.getElementById('trail'); let last=0;
+  window.addEventListener('mousemove', e=>{
+    const now=e.timeStamp||performance.now(); if(now-last<70) return; last=now;
+    const p=document.createElement('span'); p.className='paw'; p.textContent='🐾';
+    p.style.left=e.clientX+'px'; p.style.top=e.clientY+'px';
+    p.style.setProperty('--r',(Math.random()*60-30)+'deg');
+    trail.appendChild(p); setTimeout(()=>p.remove(),900);
+  }, {passive:true});
+})();
+renderHome();
+</script>
+</body>
+</html>
