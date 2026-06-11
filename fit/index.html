@@ -9,36 +9,59 @@
 <meta name="apple-mobile-web-app-title" content="MèoFit" />
 <title>MèoFit 🐾 — Lịch tập tại nhà</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐱</text></svg>" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="apple-touch-icon" href="icon.svg" />
 <style>
   :root{
+    /* màu nhận diện vũ trụ Mèo Lực Sĩ — giữ nguyên qua mọi theme */
     --green:#3fa34d; --green-d:#2f7d3a; --green-l:#7bd389;
-    --bg:#f4fbf2; --card:#ffffff; --ink:#2b3a2e; --muted:#789078;
     --red:#ff6b6b; --blue:#4dabf7; --yellow:#ffd43b; --purple:#b197fc; --pink:#ff8fb1; --orange:#ffa94d; --teal:#38d9c9;
+    /* tokens theo hệ Meomoe — LIGHT */
+    --bg:#f4fbf2; --bg-1:#e7f9e4; --bg-2:#fff3f6;
+    --card:#ffffff; --surface-2:#f3f8f1; --border:#e3efe2;
+    --ink:#2b3a2e; --muted:#789078;
     --shadow:0 8px 22px rgba(63,163,77,.14);
-    --r:22px;
-    font-size:16px;
+    --r:22px; font-size:16px;
+    --paw:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='40'%20height='40'%20viewBox='0%200%2040%2040'%3E%3Cg%20fill='%233fa34d'%20stroke='%23ffffff'%20stroke-width='1.4'%3E%3Cg%20transform='translate(0,1)%20scale(0.5)'%3E%3Cellipse%20cx='16'%20cy='21'%20rx='8'%20ry='7'/%3E%3Cellipse%20cx='7'%20cy='13'%20rx='3.4'%20ry='3.8'/%3E%3Cellipse%20cx='13'%20cy='7.5'%20rx='3.4'%20ry='4'/%3E%3Cellipse%20cx='19'%20cy='7.5'%20rx='3.4'%20ry='4'/%3E%3Cellipse%20cx='25'%20cy='13'%20rx='3.4'%20ry='3.8'/%3E%3C/g%3E%3Cg%20transform='translate(15,16)%20scale(0.5)'%3E%3Cellipse%20cx='16'%20cy='21'%20rx='8'%20ry='7'/%3E%3Cellipse%20cx='7'%20cy='13'%20rx='3.4'%20ry='3.8'/%3E%3Cellipse%20cx='13'%20cy='7.5'%20rx='3.4'%20ry='4'/%3E%3Cellipse%20cx='19'%20cy='7.5'%20rx='3.4'%20ry='4'/%3E%3Cellipse%20cx='25'%20cy='13'%20rx='3.4'%20ry='3.8'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") 6 8;
+  }
+  [data-theme='dark']{
+    --bg:#16201a; --bg-1:#1d2a22; --bg-2:#241d2f;
+    --card:#1f2b24; --surface-2:#26332b; --border:rgba(255,255,255,.10);
+    --ink:#e9f5ea; --muted:#9db4a2; --green-l:#8fe09b;
+    --shadow:0 8px 22px rgba(0,0,0,.45);
+  }
+  [data-theme='sakura']{
+    --bg:#fff0f5; --bg-1:#ffd8e8; --bg-2:#ffe5f0;
+    --card:#fffafc; --surface-2:#fff2f7; --border:#ffd9e6;
+    --ink:#5a3a48; --muted:#a96f88;
+    --shadow:0 10px 26px rgba(255,127,163,.18);
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;padding:0}
   body{
     font-family:'Quicksand',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,system-ui,sans-serif;
     background:
-      radial-gradient(circle at 12% 8%, #e7f9e4 0, transparent 40%),
-      radial-gradient(circle at 88% 4%, #fff3f6 0, transparent 35%),
+      radial-gradient(circle at 12% 8%, var(--bg-1) 0, transparent 40%),
+      radial-gradient(circle at 88% 4%, var(--bg-2) 0, transparent 35%),
       var(--bg);
     color:var(--ink);
     min-height:100vh;
     padding-bottom:84px;
     overflow-x:hidden;
+    transition:background .5s,color .5s;
+    cursor:var(--paw),auto;
   }
+  a,button{cursor:var(--paw),pointer}
   .flowers{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
   .flowers span{position:absolute;font-size:20px;opacity:.5;animation:float 9s ease-in-out infinite}
   @keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-16px) rotate(12deg)}}
 
   .app{position:relative;z-index:1;max-width:520px;margin:0 auto;padding:14px 14px 0}
 
-  header.top{display:flex;align-items:center;gap:10px;justify-content:center;padding:8px 4px 14px}
+  header.top{position:relative;display:flex;align-items:center;gap:10px;justify-content:center;padding:8px 4px 14px}
   header.top .logo{font-size:30px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.12))}
+  .theme-btn{position:absolute;right:2px;top:8px;border:none;background:var(--card);box-shadow:var(--shadow);width:40px;height:40px;border-radius:50%;font-size:1.15rem;cursor:pointer;transition:transform .18s}
+  .theme-btn:active{transform:scale(.9) rotate(-12deg)}
   header.top h1{font-size:1.45rem;margin:0;font-weight:800;letter-spacing:.5px;
     background:linear-gradient(90deg,var(--green-d),var(--green-l),var(--purple));
     -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
@@ -60,7 +83,7 @@
 
   .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:none;border-radius:18px;padding:16px;font-size:1.1rem;font-weight:800;background:linear-gradient(135deg,var(--green),var(--green-d));color:#fff;box-shadow:0 8px 18px rgba(47,125,58,.35);cursor:pointer;transition:transform .08s;font-family:inherit}
   .btn:active{transform:scale(.97)}
-  .btn.sec{background:#fff;color:var(--green-d);border:2px solid var(--green-l);box-shadow:none}
+  .btn.sec{background:var(--card);color:var(--green-d);border:2px solid var(--green-l);box-shadow:none}
   .btn.rest-day{background:linear-gradient(135deg,#b197fc,#9775fa);box-shadow:0 8px 18px rgba(151,117,250,.35)}
 
   h2.sec-title{font-size:1.05rem;margin:6px 4px 10px;font-weight:800;display:flex;align-items:center;gap:7px}
@@ -68,13 +91,13 @@
   /* level selector */
   .levels{margin-bottom:14px}
   .levels .lab{font-size:.78rem;color:var(--muted);font-weight:700;margin:0 4px 6px}
-  .seg{display:flex;gap:6px;background:#e9f5e7;padding:5px;border-radius:16px}
+  .seg{display:flex;gap:6px;background:var(--surface-2);padding:5px;border-radius:16px}
   .seg button{flex:1;border:none;background:none;padding:9px 4px;border-radius:12px;font-weight:800;color:var(--muted);font-family:inherit;font-size:.8rem;cursor:pointer;line-height:1.15}
   .seg button small{display:block;font-size:.62rem;font-weight:600;opacity:.85;margin-top:2px}
-  .seg button.on{background:#fff;color:var(--green-d);box-shadow:var(--shadow)}
+  .seg button.on{background:var(--card);color:var(--green-d);box-shadow:var(--shadow)}
 
   .week-row{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:16px;margin-bottom:8px;background:var(--card);box-shadow:var(--shadow)}
-  .week-row.today{outline:3px solid var(--green-l);background:#f3fcf1}
+  .week-row.today{outline:3px solid var(--green-l);background:var(--surface-2)}
   .week-row .dow{width:46px;font-weight:800;color:var(--green-d);font-size:.92rem;flex:none;text-align:center}
   .week-row .body{flex:1}
   .week-row .body .nm{font-weight:700;font-size:.96rem}
@@ -96,31 +119,31 @@
   .ex .nm{font-weight:800;font-size:1.02rem;line-height:1.25}
   .ex .meta{font-size:.82rem;color:var(--green-d);font-weight:700;margin-top:2px}
   .tag{display:inline-block;padding:3px 9px;border-radius:12px;font-size:.72rem;font-weight:800;color:#fff;margin-top:7px}
-  .ex .muscle{display:flex;gap:11px;align-items:center;font-size:.82rem;color:var(--ink);margin-top:9px;line-height:1.45;background:#f3f8f1;padding:9px 11px;border-radius:12px}
+  .ex .muscle{display:flex;gap:11px;align-items:center;font-size:.82rem;color:var(--ink);margin-top:9px;line-height:1.45;background:var(--surface-2);padding:9px 11px;border-radius:12px}
   .ex .muscle b{color:var(--green-d)}
   .ex .muscle .m-txt{flex:1}
   .bodymap{flex:none;width:74px;text-align:center}
-  .bodymap .m-img{width:74px;height:92px;object-fit:contain;border-radius:12px;background:#fbfdfa;border:1px solid #e3efe2;display:block}
+  .bodymap .m-img{width:74px;height:92px;object-fit:contain;border-radius:12px;background:#fbfdfa;border:1px solid var(--border);display:block}
   .bodymap .m-img.gif{background:#f4f9f2}
   .bodymap .bm-lbl{font-size:.57rem;color:var(--muted);font-weight:700;margin-top:3px;line-height:1.2}
-  .ex .gym{font-size:.82rem;color:var(--muted);margin-top:8px;line-height:1.45;background:#fff8e6;padding:9px 11px;border-radius:12px;border-left:4px solid var(--yellow)}
+  .ex .gym{font-size:.82rem;color:var(--muted);margin-top:8px;line-height:1.45;background:var(--surface-2);padding:9px 11px;border-radius:12px;border-left:4px solid var(--yellow)}
   .ex .gym b{color:var(--ink)}
   .ex .links{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
-  .ex .links a{display:inline-flex;align-items:center;gap:4px;font-size:.74rem;font-weight:800;text-decoration:none;padding:5px 10px;border-radius:20px;background:#eef7ec;color:var(--green-d)}
-  .ex .links a.vid{background:#ffeaea;color:var(--red)}
+  .ex .links a{display:inline-flex;align-items:center;gap:4px;font-size:.74rem;font-weight:800;text-decoration:none;padding:5px 10px;border-radius:20px;background:var(--surface-2);color:var(--green-d)}
+  .ex .links a.vid{background:rgba(255,107,107,.16);color:var(--red)}
 
-  nav.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;justify-content:space-around;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-top:1px solid #e3efe2;padding:6px 6px calc(6px + env(safe-area-inset-bottom));max-width:520px;margin:0 auto}
+  nav.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;justify-content:space-around;background:var(--card);backdrop-filter:blur(10px);border-top:1px solid var(--border);padding:6px 6px calc(6px + env(safe-area-inset-bottom));max-width:520px;margin:0 auto}
   nav.tabbar button{background:none;border:none;flex:1;padding:7px 2px;cursor:pointer;color:var(--muted);font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.68rem;font-weight:700;transition:color .15s}
   nav.tabbar button .i{font-size:1.35rem;transition:transform .15s}
   nav.tabbar button.active{color:var(--green-d)}
   nav.tabbar button.active .i{transform:translateY(-2px) scale(1.12)}
 
-  .player{position:fixed;inset:0;z-index:100;background:linear-gradient(160deg,#eafae6,#f4fbf2);display:none;flex-direction:column;padding:18px;padding-top:calc(18px + env(safe-area-inset-top))}
+  .player{position:fixed;inset:0;z-index:100;background:linear-gradient(160deg,var(--bg-1),var(--bg));display:none;flex-direction:column;padding:18px;padding-top:calc(18px + env(safe-area-inset-top))}
   .player.show{display:flex}
-  .player .pbar{height:8px;border-radius:8px;background:#dcefd8;overflow:hidden;margin-bottom:10px}
+  .player .pbar{height:8px;border-radius:8px;background:var(--surface-2);overflow:hidden;margin-bottom:10px}
   .player .pbar i{display:block;height:100%;background:linear-gradient(90deg,var(--green-l),var(--green));transition:width .3s}
   .player .phead{display:flex;justify-content:space-between;align-items:center;font-weight:800;color:var(--green-d);margin-bottom:10px}
-  .player .phead .x{background:#fff;border:none;width:38px;height:38px;border-radius:50%;font-size:1.1rem;box-shadow:var(--shadow);cursor:pointer;color:var(--ink)}
+  .player .phead .x{background:var(--card);border:none;width:38px;height:38px;border-radius:50%;font-size:1.1rem;box-shadow:var(--shadow);cursor:pointer;color:var(--ink)}
   .player .center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
   .player .phase-lbl{font-size:1rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
   .player .ex-name{font-size:1.55rem;font-weight:800;line-height:1.2;margin-bottom:6px;padding:0 6px}
@@ -162,7 +185,7 @@
   .catface{width:100%;height:100%;display:block}
 
   /* footer đồng bộ Meomoe Multiverse */
-  .footer{position:relative;text-align:center;padding:2.6rem 1.2rem 2.1rem;margin:20px -14px 0;background:#eaf7e6;color:var(--ink);border-radius:28px 28px 0 0}
+  .footer{position:relative;text-align:center;padding:2.6rem 1.2rem 2.1rem;margin:20px -14px 0;background:var(--surface-2);color:var(--ink);border-radius:28px 28px 0 0}
   .footer__cat{font-size:2.2rem;margin-bottom:.4rem}
   .footer p{margin:.25rem 0;font-size:.86rem;line-height:1.5}
   .footer a{color:var(--green-d);font-weight:800;text-decoration:none}
@@ -183,7 +206,7 @@
 <div class="cursor-trail" id="trail" aria-hidden="true"></div>
 
 <div class="app">
-  <header class="top"><span class="mascot" id="mascot" role="img" aria-label="Mèo Lực Sĩ"></span><h1>MèoFit</h1><span class="logo">🌸</span></header>
+  <header class="top"><span class="mascot" id="mascot" role="img" aria-label="Mèo Lực Sĩ"></span><h1>MèoFit</h1><button class="theme-btn" id="themeBtn" aria-label="Đổi giao diện">☀️</button></header>
   <section class="view show" id="v-home"></section>
   <section class="view" id="v-week"></section>
   <section class="view" id="v-sess"></section>
@@ -552,7 +575,7 @@ function nextName(){
 function ringSVG(p,color){
   const off=RING_C*(1-p);
   return `<svg width="230" height="230" viewBox="0 0 230 230">
-    <circle cx="115" cy="115" r="${RING_R}" fill="none" stroke="#dcefd8" stroke-width="16"/>
+    <circle cx="115" cy="115" r="${RING_R}" fill="none" stroke="rgba(127,160,127,.28)" stroke-width="16"/>
     <circle cx="115" cy="115" r="${RING_R}" fill="none" stroke="${color}" stroke-width="16" stroke-linecap="round" stroke-dasharray="${RING_C}" stroke-dashoffset="${off}"/></svg>`;
 }
 function header(e){
@@ -670,8 +693,22 @@ function meoFitCat(){
   </svg>`;
 }
 
+/* ============ THEME (đồng bộ Meomoe: light / dark / sakura, khoá meo:theme) ============ */
+const THEMES=['light','dark','sakura'];
+const THEME_ICON={light:'☀️',dark:'🌙',sakura:'🌸'};
+function applyTheme(t){
+  if(!THEMES.includes(t)) t='light';
+  document.documentElement.setAttribute('data-theme', t);
+  try{ localStorage.setItem('meo:theme', t); }catch(e){}
+  const b=document.getElementById('themeBtn'); if(b) b.textContent=THEME_ICON[t];
+}
+function initTheme(){ let t='light'; try{ t=localStorage.getItem('meo:theme')||'light'; }catch(e){} applyTheme(t); }
+function cycleTheme(){ let t='light'; try{ t=localStorage.getItem('meo:theme')||'light'; }catch(e){} applyTheme(THEMES[(THEMES.indexOf(t)+1)%THEMES.length]); }
+
 /* ============ INIT ============ */
 (function(){
+  initTheme();
+  const tb=document.getElementById('themeBtn'); if(tb) tb.onclick=cycleTheme;
   document.getElementById('mascot').innerHTML = meoFitCat();
   // hoa lá rơi
   const f=document.getElementById('flowers'), em=['🌸','🌼','🌷','🌿','🍀','🌺','💚','🌻'];
@@ -690,6 +727,11 @@ function meoFitCat(){
   }, {passive:true});
 })();
 renderHome();
+
+/* PWA — chạy offline (đăng ký service worker theo đường dẫn tương đối) */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); });
+}
 </script>
 </body>
 </html>

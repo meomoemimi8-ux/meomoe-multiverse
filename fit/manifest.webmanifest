@@ -1,0 +1,15 @@
+{
+  "name": "MèoFit — Lịch tập tại nhà",
+  "short_name": "MèoFit",
+  "description": "Lịch tập gym tại nhà cùng 🐾 Mèo Lực Sĩ — timer, theo dõi tiến độ, ảnh nhóm cơ & video hướng dẫn.",
+  "lang": "vi",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4fbf2",
+  "theme_color": "#3fa34d",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
