@@ -10,7 +10,8 @@
 <title>MèoFit 🐾 — Lịch tập tại nhà</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐱</text></svg>" />
 <link rel="manifest" href="manifest.webmanifest" />
-<link rel="apple-touch-icon" href="icon.svg" />
+<link rel="apple-touch-icon" href="icon-180.png" />
+<link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
 <style>
   :root{
     /* màu nhận diện vũ trụ Mèo Lực Sĩ — giữ nguyên qua mọi theme */
@@ -197,6 +198,11 @@
   @keyframes pawFade{0%{opacity:.8;transform:translate(-50%,-50%) rotate(var(--r,0deg)) scale(.55)}100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--r,0deg)) scale(1.3)}}
 
   h1, .hero .title, h2.sec-title, .player .ex-name{font-family:'Baloo 2','Quicksand',sans-serif}
+
+  /* nút cài app (PWA) */
+  .install-fab{position:fixed;right:12px;bottom:78px;z-index:45;border:none;border-radius:999px;padding:11px 16px;font-size:.9rem;font-weight:800;font-family:inherit;background:linear-gradient(135deg,var(--green),var(--green-d));color:#fff;box-shadow:0 8px 20px rgba(47,125,58,.4);cursor:pointer;display:none;align-items:center;gap:6px;animation:fabPop .4s}
+  .install-fab.show{display:inline-flex}
+  @keyframes fabPop{0%{transform:scale(0) translateY(20px)}70%{transform:scale(1.1)}100%{transform:scale(1)}}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -204,6 +210,7 @@
 <body>
 <div class="flowers" id="flowers"></div>
 <div class="cursor-trail" id="trail" aria-hidden="true"></div>
+<button class="install-fab" id="installBtn">📲 Cài app</button>
 
 <div class="app">
   <header class="top"><span class="mascot" id="mascot" role="img" aria-label="Mèo Lực Sĩ"></span><h1>MèoFit</h1><button class="theme-btn" id="themeBtn" aria-label="Đổi giao diện">☀️</button></header>
@@ -732,6 +739,22 @@ renderHome();
 if('serviceWorker' in navigator){
   window.addEventListener('load', ()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); });
 }
+
+/* Nút "Cài app" — Android/Chrome dùng beforeinstallprompt; iOS hiện hướng dẫn */
+(function(){
+  const btn=document.getElementById('installBtn'); if(!btn) return;
+  const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  if(standalone) return; // đã cài rồi thì ẩn
+  let deferred=null;
+  window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); deferred=e; btn.textContent='📲 Cài MèoFit'; btn.classList.add('show'); });
+  window.addEventListener('appinstalled', ()=>{ btn.classList.remove('show'); deferred=null; });
+  const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  if(isIOS){ btn.classList.add('show'); }
+  btn.onclick=async ()=>{
+    if(deferred){ deferred.prompt(); await deferred.userChoice; deferred=null; btn.classList.remove('show'); }
+    else { alert('Cài MèoFit vào màn hình chính 🐾\n\niPhone: bấm nút Chia sẻ ⎙ ở thanh Safari → "Thêm vào MH chính".\nAndroid: menu ⋮ → "Cài đặt ứng dụng / Thêm vào MH chính".'); }
+  };
+})();
 </script>
 </body>
 </html>
