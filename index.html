@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ===== Design tokens (giống meomoe.com) — light / dark / sakura ===== */
+/* ===== Design tokens (đồng bộ meomoe.com + Kawaii vibe #4) — light / dark / sakura ===== */
 :root{
   --pink:#ffb3c6; --pink-soft:#ffd6e0; --pink-deep:#ff7fa3;
   --cream:#fff7f2; --peach:#ffe4d6; --lilac:#e6d6ff; --sky:#cdeffd; --yellow:#fff3c4; --mint:#d7f5e3;
@@ -21,7 +21,7 @@
   --glass-bg:rgba(255,255,255,.62); --glass-border:rgba(255,255,255,.75); --border-soft:rgba(255,127,163,.18);
   --shadow-sm:0 6px 16px rgba(255,127,163,.13); --shadow:0 14px 34px rgba(255,127,163,.18);
   --shadow-md:0 18px 42px rgba(255,127,163,.2); --shadow-lg:0 30px 64px rgba(180,130,220,.24);
-  --radius:26px; --radius-sm:16px;
+  --radius:32px; --radius-sm:18px; /* Bo tròn hơn vibe #1 */
   --font-head:'Baloo 2',system-ui,sans-serif; --font-body:'Quicksand',system-ui,sans-serif;
   /* con trỏ = 2 dấu chân mèo 🐾 */
   --paw:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='40'%20height='40'%20viewBox='0%200%2040%2040'%3E%3Cg%20fill='%23ff7fa3'%20stroke='%23ffffff'%20stroke-width='1.4'%3E%3Cg%20transform='translate(0,1)%20scale(0.5)'%3E%3Cellipse%20cx='16'%20cy='21'%20rx='8'%20ry='7'/%3E%3Cellipse%20cx='7'%20cy='13'%20rx='3.4'%20ry='3.8'/%3E%3Cellipse%20cx='13'%20cy='7.5'%20rx='3.4'%20ry='4'/%3E%3Cellipse%20cx='19'%20cy='7.5'%20rx='3.4'%20ry='4'/%3E%3Cellipse%20cx='25'%20cy='13'%20rx='3.4'%20ry='3.8'/%3E%3C/g%3E%3Cg%20transform='translate(15,16)%20scale(0.5)'%3E%3Cellipse%20cx='16'%20cy='21'%20rx='8'%20ry='7'/%3E%3Cellipse%20cx='7'%20cy='13'%20rx='3.4'%20ry='3.8'/%3E%3Cellipse%20cx='13'%20cy='7.5'%20rx='3.4'%20ry='4'/%3E%3Cellipse%20cx='19'%20cy='7.5'%20rx='3.4'%20ry='4'/%3E%3Cellipse%20cx='25'%20cy='13'%20rx='3.4'%20ry='3.8'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") 6 8;
@@ -94,16 +94,18 @@ a,button,.nav__link,.hobby{cursor:var(--paw),pointer}
   background:radial-gradient(40% 40% at 20% 25%,var(--pink-soft),transparent 60%),radial-gradient(45% 45% at 80% 20%,var(--sky),transparent 60%),radial-gradient(50% 50% at 50% 85%,var(--lilac),transparent 60%)}
 @keyframes aurora{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-4%,3%) scale(1.12)}}
 .hero__bg{position:absolute;inset:0;pointer-events:none}
-/* ===== Vũ trụ xoay vần — hệ mặt trời mini quanh chú mèo ===== */
+/* ===== Vũ trụ xoay vần: hệ cosmos mini quay quanh chú mèo ===== */
 .cosmos{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1;pointer-events:none}
 .orbit{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;border:1.6px dashed var(--border-soft);animation:cosmos-spin linear infinite}
 .sat{position:absolute;inset:0;transform:rotate(var(--a))}
 .sat__e{position:absolute;top:-.8em;left:50%;display:inline-block;font-size:1.6rem;filter:drop-shadow(0 5px 9px rgba(0,0,0,.14));animation:cosmos-spin-e linear infinite}
 @keyframes cosmos-spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
 @keyframes cosmos-spin-e{from{transform:translateX(-50%) rotate(0)}to{transform:translateX(-50%) rotate(360deg)}}
+/* emojis trôi nổi: xốp mềm, Kawaii #4 */
 .float{position:absolute;font-size:clamp(1.6rem,4vw,2.6rem);opacity:.7;top:calc(8% + (var(--i) * 9%));left:calc(4% + (var(--i) * 9.2%));
-  animation:floaty calc(6s + var(--i) * .7s) ease-in-out infinite;animation-delay:calc(var(--i) * -.6s)}
-@keyframes floaty{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-26px) rotate(8deg)}}
+  animation:floaty calc(6s + var(--i) * .7s) ease-in-out infinite;animation-delay:calc(var(--i) * -.6s);transform-box:fill-box;transform-origin:center}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-6deg) scale(1)}50%{transform:translateY(-26px) rotate(8deg) scale(1.05)}}
+
 .hero__content{position:relative;z-index:2;max-width:720px;padding:2.5rem 1.5rem;border-radius:36px;background:var(--glass-bg);
   backdrop-filter:blur(10px) saturate(1.15);-webkit-backdrop-filter:blur(10px) saturate(1.15);border:1px solid var(--glass-border);box-shadow:var(--shadow-lg)}
 .avatar{position:relative;width:150px;height:150px;margin:0 auto 1.5rem;background:var(--surface);border-radius:50%;display:grid;place-items:center;box-shadow:var(--shadow-md);animation:bob 3.5s ease-in-out infinite}
@@ -120,6 +122,7 @@ a,button,.nav__link,.hobby{cursor:var(--paw),pointer}
 .hero__name{font-family:var(--font-head);font-weight:800;font-size:clamp(2.4rem,7vw,4.2rem);line-height:1.05;margin:.3rem 0 .6rem;text-wrap:balance}
 .hero__nick{display:block;font-size:clamp(1rem,2.6vw,1.4rem);color:var(--ink-soft);font-weight:600;margin-top:.4rem}
 .hero__tag{font-size:clamp(1rem,2.4vw,1.2rem);color:var(--ink-soft);max-width:540px;margin:0 auto 2rem;line-height:1.6;text-wrap:balance}
+.hero__tag b{color:var(--pink-deep)}
 .hero__cta{display:flex;gap:.9rem;justify-content:center;flex-wrap:wrap}
 .scroll-hint{position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);text-decoration:none;color:var(--ink-soft);font-size:.85rem;display:flex;flex-direction:column;align-items:center;gap:.1rem;z-index:2}
 .scroll-hint__arrow{font-size:1.6rem;animation:nudge 1.6s ease-in-out infinite}
@@ -136,8 +139,8 @@ a,button,.nav__link,.hobby{cursor:var(--paw),pointer}
 .section__lead{text-align:center;max-width:640px;margin:0 auto 2.5rem;font-size:1.1rem;line-height:1.75;color:var(--ink-soft)}
 .section__lead b{color:var(--pink-deep)}
 
-/* portal cards (dựa trên .hobby của meomoe.com) */
-.hobbies{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.3rem}
+/* portal cards: Kawaii + Bo tròn #1 + Xốp mềm #4 */
+.hobbies{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.4rem}
 .hobby{position:relative;border-radius:var(--radius);padding:2rem 1.4rem;text-align:center;box-shadow:var(--shadow);overflow:hidden;
   transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s;animation:rise .6s ease backwards;animation-delay:var(--d);text-decoration:none;color:inherit;display:block}
 .hobby__glow{position:absolute;inset:auto -30% -60% -30%;height:120%;background:radial-gradient(circle,var(--pink-soft),transparent 70%);opacity:0;transition:opacity .3s}
@@ -147,12 +150,13 @@ a,button,.nav__link,.hobby{cursor:var(--paw),pointer}
 .hobby--soon:hover{transform:translateY(-4px) scale(1)}
 .hobby__emoji{position:relative;font-size:3rem;display:inline-block;animation:wiggle 4s ease-in-out infinite}
 @keyframes wiggle{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
-/* mèo linh vật trong mỗi cổng — long lanh + chuyển động */
+/* mèo linh vật Đa Vũ Trụ: "lên đồ" đồng bộ — long lanh + xốp mềm #4 */
 .hobby__cat{position:relative;width:92px;height:92px;display:inline-block;animation:catbob 4.2s ease-in-out infinite;filter:drop-shadow(0 9px 16px rgba(0,0,0,.14))}
 @keyframes catbob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-7px) rotate(3deg)}}
 .hobby:hover .hobby__cat{animation:catpop .7s ease}
 @keyframes catpop{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-13px) rotate(-7deg) scale(1.08)}55%{transform:translateY(-3px) rotate(6deg) scale(1.03)}80%{transform:rotate(-2deg)}}
 .catface{width:100%;height:100%;overflow:visible}
+.hobby__catimg{width:118%;height:118%;margin:-9%;object-fit:contain;display:block}
 .cf-ear{transform-box:fill-box;transform-origin:50% 100%}
 .cf-ear-l{animation:cfEarL 4.6s ease-in-out infinite}
 .cf-ear-r{animation:cfEarR 4.6s ease-in-out infinite}
@@ -165,31 +169,36 @@ a,button,.nav__link,.hobby{cursor:var(--paw),pointer}
 .cf-spark{transform-box:fill-box;transform-origin:center;animation:cfspark 2.6s ease-in-out infinite}
 .cf-spark.s2{animation-delay:1.3s}
 @keyframes cfspark{0%,100%{opacity:.12;transform:scale(.35) rotate(0)}50%{opacity:1;transform:scale(1) rotate(40deg)}}
+
 .hobby__prop{position:absolute;top:16px;right:18px;font-size:1.5rem;filter:drop-shadow(0 3px 6px rgba(0,0,0,.16));animation:wiggle 4s ease-in-out infinite}
-.hobby__persona{position:relative;font-family:var(--font-head);font-weight:700;font-size:.8rem;color:var(--pink-deep);margin:-.1rem 0 .5rem;letter-spacing:.02em}
-.hobby__title{position:relative;font-family:var(--font-head);font-weight:700;font-size:1.3rem;margin:.7rem 0 .4rem}
-.hobby__desc{position:relative;color:var(--ink-soft);line-height:1.6;font-size:.98rem}
-.hobby__badge{position:relative;display:inline-flex;align-items:center;gap:.4rem;margin-top:.9rem;font-family:var(--font-head);font-weight:700;font-size:.78rem;padding:.3rem .8rem;border-radius:999px}
+.hobby__persona{position:relative;font-family:var(--font-head);font-weight:700;font-size:.85rem;color:var(--pink-deep);margin:-.1rem 0 .5rem;letter-spacing:.02em}
+.hobby__title{position:relative;font-family:var(--font-head);font-weight:700;font-size:1.35rem;margin:.7rem 0 .4rem}
+.hobby__desc{position:relative;color:var(--ink-soft);line-height:1.6;font-size:.98rem;margin-bottom:.8rem}
+.hobby__badge{position:relative;display:inline-flex;align-items:center;gap:.4rem;font-family:var(--font-head);font-weight:700;font-size:.78rem;padding:.3rem .8rem;border-radius:999px}
 .hobby__badge--live{background:var(--mint);color:#1f7a52}
 .hobby__badge--soon{background:var(--surface-2);color:var(--ink-soft);border:1px solid var(--border-soft)}
 .hobby__badge .dot{width:7px;height:7px;border-radius:50%;background:currentColor;animation:dotpulse 1.7s ease-in-out infinite}
-.hobby__go{position:relative;display:block;margin-top:.7rem;font-family:var(--font-head);font-weight:800;color:var(--pink-deep);font-size:.95rem}
+.hobby__go{position:relative;display:block;margin-top:.8rem;font-family:var(--font-head);font-weight:800;color:var(--pink-deep);font-size:.95rem}
 @keyframes dotpulse{0%,100%{opacity:1}50%{opacity:.35}}
 @keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+/* ===== FX TUNG HOA MÈOFIT ĐỒNG BỘ 🌸✨ ===== */
+.flower-burst{position:absolute;pointer-events:none;transform:translate(-50%,-50%);z-index:10;animation:burstFade .8s ease-out forwards;will-change:transform,opacity}
+@keyframes burstFade{0%{transform:translate(-50%,-50%) scale(.3);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1.3);opacity:0}}
 
 /* about */
 .about-card{border-radius:var(--radius);padding:2.2rem 2rem;box-shadow:var(--shadow);text-align:center;line-height:1.8;color:var(--ink-soft);font-size:1.05rem;max-width:720px;margin:0 auto}
 .about-card b{color:var(--pink-deep)}
 
 /* footer */
-.footer{position:relative;text-align:center;padding:3.5rem 1.5rem 3rem;background:var(--pink-soft);color:var(--ink);margin-top:2rem}
+.footer{position:relative;text-align:center;padding:3.5rem 1.5rem 3rem;background:var(--pink-soft);color:var(--ink);margin-top:2rem;border-radius:28px 28px 0 0}
 .footer__cat{font-size:2.6rem;margin-bottom:.6rem}
 .footer p{margin:.2rem 0}
-.footer__domain{color:var(--ink-soft);font-size:.9rem}
+.footer__domain{color:var(--ink-soft);font-size:.9rem;font-weight:600}
 
-/* fx */
+/* cursors & effects */
 .cursor-trail{position:fixed;inset:0;pointer-events:none;z-index:997}
-.cursor-trail__paw{position:absolute;transform:translate(-50%,-50%) rotate(var(--rot));font-size:1.1rem;animation:pawFade .9s ease-out forwards}
+.cursor-trail__paw{position:absolute;transform:translate(-50%,-50%) rotate(var(--rot));font-size:1.1rem;animation:pawFade .9s ease-out forwards;will-change:transform,opacity}
 @keyframes pawFade{0%{opacity:.85;transform:translate(-50%,-50%) rotate(var(--rot)) scale(.6)}100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--rot)) scale(1.3)}}
 .petals{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 .petal{position:absolute;top:-8%;opacity:.7;animation-name:petalFall;animation-timing-function:linear;animation-iteration-count:infinite;will-change:transform}
@@ -220,7 +229,7 @@ a,button,.nav__link,.hobby{cursor:var(--paw),pointer}
   <div class="cosmos" id="cosmos" aria-hidden="true"></div>
   <div class="hero__bg" id="floats" aria-hidden="true"></div>
   <div class="hero__content glass">
-    <div class="avatar" role="img" aria-label="Mèo con lang thang">
+    <div class="avatar" role="img" aria-label="Mèo con lang thang giữa muôn vàn vũ trụ">
       <span class="avatar__ring" aria-hidden="true"></span>
       <span class="avatar__cat">🐱</span>
       <span class="avatar__bow">🎀</span>
@@ -274,19 +283,46 @@ a,button,.nav__link,.hobby{cursor:var(--paw),pointer}
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer__cat">🐱💤</div>
-  <p>Made with 🎀 &amp; 🐾</p>
-  <p class="footer__domain">Meomoe Multiverse · 2026</p>
+  <p>Made with 🎀 &amp; 🐾 — một vũ trụ của meomoe.com</p>
+  <p class="footer__domain">🐾 Meomoe Multiverse · 2026</p>
 </footer>
 
 <script>
-// ===== Bộ nhận diện: mèo con biến hình theo từng vũ trụ =====
-// Vẽ một gương mặt mèo theo màu lông + màu mắt (mèo đen Hanyu = Miêu Mặc).
-function catFace(fur, eye, dark){
+// ===== Bộ nhận diện "Full Đồng Bộ": mèo con biến hình (lai #1, #2, #4) =====
+// Vẽ một gương mặt mèo theo màu lông + màu mắt + style cụ thể
+function catFace(fur, eye, dark, style){
   const whisk = dark ? 'rgba(255,255,255,.55)' : 'rgba(91,74,82,.4)';
   const spark = dark ? '#fff0a6' : '#ff9ec4';
+
+  // Nét vẽ vô tri Tối Giản #2: Miêu Mặc Hanyu — vẫn sống động đồng bộ (tai vẫy, chớp mắt, lấp lánh)
+  if(style === 'hanyu'){
+    return `<svg viewBox="0 0 100 100" class="catface" aria-hidden="true">
+      <g class="cf-ear cf-ear-l"><path d="M22 44 C16 10 43 21 51 44 Z" fill="${fur}"/></g>
+      <g class="cf-ear cf-ear-r"><path d="M78 44 C84 10 57 21 49 44 Z" fill="${fur}"/></g>
+      <circle cx="50" cy="58" r="38" fill="${fur}"/>
+      <ellipse class="cf-shine" cx="42" cy="40" rx="22" ry="13" fill="#fff" opacity=".16"/>
+      <g class="cf-eye"><ellipse cx="37" cy="57" rx="9" ry="11" fill="${eye}"/><circle cx="36" cy="54" r="3" fill="#fff"/></g>
+      <g class="cf-eye"><ellipse cx="63" cy="57" rx="9" ry="11" fill="${eye}"/><circle cx="62" cy="54" r="3" fill="#fff"/></g>
+      <path d="M46 72 h8 l-4 4 Z" fill="#ff8fb0"/>
+      <path d="M50 76 q-5 5 -11 1 M50 76 q5 5 11 1" stroke="#000" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <g stroke="${whisk}" stroke-width="1.6" stroke-linecap="round"><line x1="22" y1="64" x2="2" y2="60"/><line x1="22" y1="71" x2="2" y2="74"/><line x1="78" y1="64" x2="98" y2="60"/><line x1="78" y1="71" x2="98" y2="74"/></g>
+      <g transform="translate(87,25)"><g class="cf-spark s1"><path d="M0,-6 C1.2,-1.2 1.2,-1.2 6,0 C1.2,1.2 1.2,1.2 0,6 C-1.2,1.2 -1.2,1.2 -6,0 C-1.2,-1.2 -1.2,-1.2 0,-6 Z" fill="${spark}"/></g></g>
+      <g transform="translate(11,56)"><g class="cf-spark s2"><path d="M0,-5 C1,-1 1,-1 5,0 C1,1 1,1 0,5 C-1,1 -1,1 -5,0 C-1,-1 -1,-1 0,-5 Z" fill="${spark}"/></g></g>
+    </svg>`;
+  }
+
+  // Nét vẽ xốp mềm, Kawaii #4: Mèo Fit (Lực Sĩ) / Mèo Tarot (Tiên Tri)
+  let muscle = '';
+  if(style === 'fit'){
+    // Bắp tay xốp mềm kẹo ngọt #4
+    muscle = `<g transform="translate(10,50)"><circle r="12" fill="${fur}"/><circle cx="8" cy="-4" r="8" fill="${fur}"/></g>
+              <g transform="translate(90,50)"><circle r="12" fill="${fur}"/><circle cx="-8" cy="-4" r="8" fill="${fur}"/></g>`;
+  }
+
   return `<svg viewBox="0 0 100 100" class="catface" aria-hidden="true">
     <g class="cf-ear cf-ear-l"><path d="M22 44 C16 10 43 21 51 44 Z" fill="${fur}"/><path d="M30 38 C27 22 40 28 45 40 Z" fill="#ffd0de"/></g>
     <g class="cf-ear cf-ear-r"><path d="M78 44 C84 10 57 21 49 44 Z" fill="${fur}"/><path d="M70 38 C73 22 60 28 55 40 Z" fill="#ffd0de"/></g>
+    ${muscle}
     <circle cx="50" cy="58" r="38" fill="${fur}"/>
     <ellipse class="cf-shine" cx="42" cy="40" rx="22" ry="13" fill="#fff" opacity=".16"/>
     <ellipse cx="32" cy="72" rx="9" ry="5.5" fill="#ff8fb0" opacity=".5"/>
@@ -312,17 +348,17 @@ function catFace(fur, eye, dark){
   </svg>`;
 }
 
-// Mỗi cổng = một "giống mèo" riêng (lông · mắt · vật mang theo · tên · lời mơ màng).
+// Mỗi cổng = một "giống mèo" riêng (style phối hợp #1, #2, #4).
 const PRO = [
-  { fur:'#211f1a', eye:'#46c9a8', dark:true,  prop:'🀄', t:'Hán ngữ', persona:'🐾 Miêu Mặc',  d:'Theo dấu mực của Miêu Mặc, từng nét chữ Hán hiện ra như sao rơi trên trang giấy — HSK 1–9, flashcard & luyện viết.', href:'https://hanyu.meomoe.com', live:true },
-  { fur:'#ffb38a', eye:'#5b4a52', dark:false, prop:'🏋️', t:'Fitness tại nhà', persona:'🐾 Mèo Lực Sĩ', d:'Mỗi sáng một chút, mèo nhẹ nhàng kéo bạn rời chiếc chăn ấm — lịch tập tại nhà không cần dụng cụ, có timer, ảnh nhóm cơ & video hướng dẫn.', href:'https://fit.meomoe.com', live:true },
-  { fur:'#e6d6ff', eye:'#ff7fa3', dark:false, prop:'🌈', t:'Personal Color', persona:'🐾 Mèo Cầu Vồng', d:'Mèo nhúng chân vào hồ cầu vồng, tìm giúp bạn những gam màu khiến gương mặt bừng sáng như nắng.' },
-  { fur:'#ffb3c6', eye:'#7a5a82', dark:false, prop:'👗', t:'Body & Style', persona:'🐾 Mèo Điệu Đà', d:'Soi mình trong tấm gương mây, mèo thì thầm gợi ý dáng đồ và lớp makeup tôn lên nét riêng của bạn.' },
+  { fur:'#211f1a', eye:'#46c9a8', dark:true,  prop:'🀄', style:'hanyu', t:'Hán ngữ', persona:'🐾 Miêu Mặc', d:'Theo dấu mực của Miêu Mặc, từng nét chữ Hán hiện ra như sao rơi trên trang giấy — flashcard & luyện viết.', href:'https://hanyu.meomoe.com', live:true },
+  { fur:'#ffb38a', eye:'#5b4a52', dark:false, prop:'🏋️', style:'fit', img:'mascots/meofit.png', t:'Fitness tại nhà', persona:'🐾 Mèo Lực Sĩ', d:'Mèo nhẹ nhàng kéo bạn rời chiếc chăn ấm — lịch tập không dụng cụ, timer & bông hoa fit lấp lánh.', href:'https://fit.meomoe.com', live:true },
+  { fur:'#e6d6ff', eye:'#ff7fa3', dark:false, prop:'🌈', style:'kawaii', t:'Personal Color', persona:'🐾 Mèo Cầu Vồng', d:'Mèo nhúng chân vào hồ cầu vồng, tìm giúp bạn những gam màu khiến gương mặt bừng sáng như nắng.' },
+  { fur:'#ffb3c6', eye:'#7a5a82', dark:false, prop:'👗', style:'kawaii', t:'Body & Style', persona:'🐾 Mèo Điệu Đà', d:'Soi mình trong tấm gương mây, mèo thì thầm gợi ý dáng đồ tôn lên nét riêng của bạn.' },
 ];
 const HOBBIES = [
-  { fur:'#b388ff', eye:'#fff3c4', dark:true,  prop:'🔮', t:'Tarot', persona:'🐾 Mèo Tiên Tri', d:'Dưới ánh trăng tím, mèo lật từng lá bài thì thầm về ngày mai — học đọc Tarot từ con số 0 theo Hành trình Chàng Khờ.', href:'https://tarot.meomoe.com', live:true },
-  { fur:'#bfe3ff', eye:'#ff7fa3', dark:false, prop:'🖌️', t:'Vẽ Digital', persona:'🐾 Mèo Hoạ Sĩ', d:'Cọ lông mèo lướt trên bầu trời số, dắt bạn vẽ giấc mơ của mình từ nét đầu tiên.' },
-  { fur:'#ff9ec4', eye:'#5b4a52', dark:false, prop:'💅', t:'Nail Design', persona:'🐾 Mèo Móng Hồng', d:'Mèo tỉ mỉ tô từng móng nhỏ lấp lánh — tự thiết kế mẫu nail theo đúng gu của bạn.' },
+  { fur:'#b388ff', eye:'#fff3c4', dark:true,  prop:'🔮', style:'kawaii', t:'Tarot', persona:'🐾 Mèo Tiên Tri', d:'Dưới ánh trăng tím, mèo lật từng lá bài — học đọc Tarot theo Hành trình Chàng Khờ.', href:'https://tarot.meomoe.com', live:true },
+  { fur:'#bfe3ff', eye:'#ff7fa3', dark:false, prop:'🖌️', style:'kawaii', t:'Vẽ Digital', persona:'🐾 Mèo Hoạ Sĩ', d:'Cọ lông mèo lướt trên bầu trời số, dắt bạn vẽ giấc mơ của mình từ nét đầu tiên.' },
+  { fur:'#ff9ec4', eye:'#5b4a52', dark:false, prop:'💅', style:'kawaii', t:'Nail Design', persona:'🐾 Mèo Móng Hồng', d:'Mèo tỉ mỉ tô từng móng nhỏ lấp lánh — tự thiết kế mẫu nail theo đúng gu của bạn.' },
 ];
 
 function card(s, i){
@@ -330,9 +366,11 @@ function card(s, i){
   const tag = live
     ? '<span class="hobby__badge hobby__badge--live"><span class="dot"></span>Đang chạy</span>'
     : '<span class="hobby__badge hobby__badge--soon">Sắp ra mắt</span>';
+  // Chỉ MèoFit mới có hiệu ứng tung hoa fit đồng bộ 🌸✨
+  const burst = (s.style === 'fit') ? 'data-burst-fit' : '';
   const inner = `<div class="hobby__glow"></div>
     <span class="hobby__prop">${s.prop}</span>
-    <span class="hobby__cat">${catFace(s.fur, s.eye, s.dark)}</span>
+    <span class="hobby__cat">${s.img ? `<img class="hobby__catimg" src="${s.img}" alt="${s.persona}">` : catFace(s.fur, s.eye, s.dark, s.style)}</span>
     <h3 class="hobby__title">${s.t}</h3>
     <div class="hobby__persona">${s.persona}</div>
     <p class="hobby__desc">${s.d}</p>${tag}
@@ -341,18 +379,19 @@ function card(s, i){
   el.className = 'hobby glass' + (live ? '' : ' hobby--soon');
   if(live) el.href = s.href;
   el.style.setProperty('--d', (i*0.08)+'s');
+  if(burst) el.setAttribute('data-burst-fit', '');
   el.innerHTML = inner;
   return el;
 }
 PRO.forEach((s,i)=>document.getElementById('grid-pro').appendChild(card(s,i)));
 HOBBIES.forEach((s,i)=>document.getElementById('grid-hobbies').appendChild(card(s,i)));
 
-// ===== floating emojis trong hero =====
+// ===== floating emojis hero: xốp mềm, Kawaii #4 =====
 const CUTE=['🎀','✨','🌸','🐾','💖','🧶','🍡','⭐','🌷','🫧','🍓'];
 const fl=document.getElementById('floats');
 CUTE.forEach((c,i)=>{ const s=document.createElement('span'); s.className='float'; s.style.setProperty('--i',i); s.textContent=c; fl.appendChild(s); });
 
-// ===== vũ trụ xoay vần: hệ mặt trời mini quay quanh chú mèo =====
+// ===== vũ trụ xoay vần: hệ cosmos mini quay quanh chú mèo =====
 const ORBITS=[
   { size:300, dur:24, rev:false, sats:[{e:'🪐',a:18},{e:'⭐',a:205}] },
   { size:440, dur:36, rev:true,  sats:[{e:'🌙',a:120},{e:'🧶',a:300}] },
@@ -414,14 +453,50 @@ const spy=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ lin
 const reveal=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('is-visible'); reveal.unobserve(e.target); }}),{threshold:.12});
 document.querySelectorAll('[data-reveal]').forEach(s=>reveal.observe(s));
 
-// ===== vệt dấu chân mèo theo chuột =====
-const PAWS=['🐾','🐾','✨','🌸']; const trail=document.getElementById('trail'); let seq=0,last=0;
-if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
-  addEventListener('pointermove',e=>{ if(e.timeStamp-last<70)return; last=e.timeStamp; const id=++seq;
-    const s=document.createElement('span'); s.className='cursor-trail__paw'; s.textContent=PAWS[id%PAWS.length];
-    s.style.left=e.clientX+'px'; s.style.top=e.clientY+'px'; s.style.setProperty('--rot',((id*37)%60-30)+'deg');
-    trail.appendChild(s); setTimeout(()=>s.remove(),900); });
-}
+// ===== FX ĐỒNG BỘ MÈO MULTIVERSE: trail dấu chân mèo & hiệu ứng tung hoa fit =====
+const PAWS=['🐾','🐾','✨','🌸']; const trail=document.getElementById('trail'); let seq=0,lastPaw=0;
+const FIT_FLOWERS=['🌸','✨','💮','💐','🌷','💖','💐','🏵️']; let lastFit=0;
+
+addEventListener('pointermove',e=>{
+  const now = e.timeStamp;
+  const isReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(isReduced) return;
+
+  // 1. Trail dấu chân mèo + lấp lánh (toàn trang)
+  if(now - lastPaw > 65){
+    lastPaw = now; const id = ++seq;
+    const s = document.createElement('span'); s.className = 'cursor-trail__paw'; s.textContent = PAWS[id%PAWS.length];
+    s.style.left = e.clientX+'px'; s.style.top = e.clientY+'px'; s.style.setProperty('--rot',((id*37)%60-30)+'deg');
+    trail.appendChild(s); setTimeout(()=>s.remove(),900);
+  }
+
+  // 2. Hiệu ứng tung hoa Fit (chỉ khi hover vào MèoFit card) ✨🌸
+  const fitCard = e.target.closest('[data-burst-fit]');
+  if(fitCard && now - lastFit > 90){
+    lastFit = now;
+    const box = fitCard.getBoundingClientRect();
+    const x = e.clientX - box.left;
+    const y = e.clientY - box.top;
+
+    // Tạo 3-4 hạt cùng lúc
+    for(let i=0; i<3; i++){
+      const f = document.createElement('span');
+      f.className = 'flower-burst';
+      f.textContent = FIT_FLOWERS[Math.floor(Math.random()*FIT_FLOWERS.length)];
+      f.style.left = x + 'px';
+      f.style.top = y + 'px';
+      f.style.fontSize = (0.7 + Math.random()*0.8) + 'rem';
+
+      const dx = (Math.random() - 0.5) * 120 + 'px';
+      const dy = (Math.random() - 0.5) * 120 + 'px';
+      f.style.setProperty('--dx', dx);
+      f.style.setProperty('--dy', dy);
+
+      fitCard.appendChild(f);
+      setTimeout(()=>f.remove(), 800);
+    }
+  }
+});
 </script>
 </body>
 </html>
