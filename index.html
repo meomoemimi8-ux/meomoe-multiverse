@@ -156,7 +156,7 @@ a,button,.nav__link,.hobby{cursor:var(--paw),pointer}
 .hobby:hover .hobby__cat{animation:catpop .7s ease}
 @keyframes catpop{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-13px) rotate(-7deg) scale(1.08)}55%{transform:translateY(-3px) rotate(6deg) scale(1.03)}80%{transform:rotate(-2deg)}}
 .catface{width:100%;height:100%;overflow:visible}
-.hobby__catimg{width:104%;height:104%;margin:-2%;object-fit:contain;display:block;border-radius:24%}
+.hobby__catimg{width:100%;height:100%;margin:0;object-fit:contain;display:block}
 .cf-ear{transform-box:fill-box;transform-origin:50% 100%}
 .cf-ear-l{animation:cfEarL 4.6s ease-in-out infinite}
 .cf-ear-r{animation:cfEarR 4.6s ease-in-out infinite}
@@ -350,7 +350,7 @@ function catFace(fur, eye, dark, style){
 
 // Mỗi cổng = một "giống mèo" riêng (style phối hợp #1, #2, #4).
 const PRO = [
-  { fur:'#211f1a', eye:'#46c9a8', dark:true,  prop:'🀄', style:'hanyu', img:'mascots/mieumac.png', t:'Hán ngữ', persona:'🐾 Miêu Mặc', d:'Theo dấu mực của Miêu Mặc, từng nét chữ Hán hiện ra như sao rơi trên trang giấy — flashcard & luyện viết.', href:'https://hanyu.meomoe.com', live:true },
+  { fur:'#211f1a', eye:'#46c9a8', dark:true,  prop:'🀄', style:'hanyu', img:'mascots/mieumac.png?v=2', t:'Hán ngữ', persona:'🐾 Miêu Mặc', d:'Theo dấu mực của Miêu Mặc, từng nét chữ Hán hiện ra như sao rơi trên trang giấy — flashcard & luyện viết.', href:'https://hanyu.meomoe.com', live:true },
   { fur:'#ffb38a', eye:'#5b4a52', dark:false, prop:'🏋️', style:'fit', img:'mascots/meofit.png', t:'Fitness tại nhà', persona:'🐾 Mèo Lực Sĩ', d:'Mèo nhẹ nhàng kéo bạn rời chiếc chăn ấm — lịch tập không dụng cụ, timer & bông hoa fit lấp lánh.', href:'https://fit.meomoe.com', live:true },
   { fur:'#e6d6ff', eye:'#ff7fa3', dark:false, prop:'🌈', style:'kawaii', t:'Personal Color', persona:'🐾 Mèo Cầu Vồng', d:'Mèo nhúng chân vào hồ cầu vồng, tìm giúp bạn những gam màu khiến gương mặt bừng sáng như nắng.' },
   { fur:'#ffb3c6', eye:'#7a5a82', dark:false, prop:'👗', style:'kawaii', t:'Body & Style', persona:'🐾 Mèo Điệu Đà', d:'Soi mình trong tấm gương mây, mèo thì thầm gợi ý dáng đồ tôn lên nét riêng của bạn.' },
